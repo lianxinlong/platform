@@ -4,6 +4,7 @@
     <router-link to="/home">首页</router-link>
     <router-link to="/data">数据</router-link>
   </div>
+  <div>1111</div>
   <div id="cesiumContainer">
     <div id="latlng_show">
       <div style="float:left;">经度：<span id="longitude_show"></span></div>
@@ -13,23 +14,35 @@
         <div style="float:left;">俯仰角：<span id="pitch_show"></span></div>
         <div style="float:left;">方向：<span id="heading_show"></span></div> -->
     </div>
+    <div>2222</div>
   </div>
+  <div>3333</div>
 </template>
 
 <script>
 export default {
   name: "cesiumContainer",
-  props: {
-    msg: String
+  // props: {
+  //   msg: String
+  // },
+  data(){
+      return{
+        defaultAccessToken:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3ZTA3NzY2ZC1lMDdmLTRjODAtYmI2My05NTI3MjNkYjNjZmEiLCJpZCI6MzczOTAsImlhdCI6MTYwNDk5Mzg5OX0.BYBiqacYVkJz-nXU1qopx7PKpDTfLe4490f-L1HuybQ',
+        token:'65f3777bb7d614820e3286b4572abf6a',
+        tdtUrl:'https://t{s}.tianditu.gov.cn/'
+      }
   },
   mounted() {
-
+    Cesium.Ion.defaultAccessToken = this.defaultAccessToken;
+    var token = this.token;
+    var tdtUrl = this.tdtUrl;
+    // var subdomains = ['0', '1', '2', '3', '4', '5', '6', '7'];
 
     var viewer = new Cesium.Viewer("cesiumContainer", {
       animation: false, //是否创建动画小器件，左下角仪表
       baseLayerPicker: false, //是否显示图层选择器
       fullscreenButton: false, //是否显示全屏按钮
-      geocoder: true, //是否显示geocoder小器件，右上角查询按钮
+      geocoder: false, //是否显示geocoder小器件，右上角查询按钮
       homeButton: false, //是否显示Home按钮
       infoBox: false, //是否显示信息框
       sceneModePicker: false, //是否显示3D/2D选择器
@@ -60,16 +73,12 @@ export default {
     viewer._cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
 
     viewer.imageryLayers.remove(viewer.imageryLayers.get(0));//默认的Cesium会加载一个bingMap底图，这个地图网络不太好，一般要先去掉这个默认的
-    Cesium.Ion.defaultAccessToken =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3ZTA3NzY2ZC1lMDdmLTRjODAtYmI2My05NTI3MjNkYjNjZmEiLCJpZCI6MzczOTAsImlhdCI6MTYwNDk5Mzg5OX0.BYBiqacYVkJz-nXU1qopx7PKpDTfLe4490f-L1HuybQ';
-    var token = '65f3777bb7d614820e3286b4572abf6a';
-    var tdtUrl = 'https://t{s}.tianditu.gov.cn/';
-    var subdomains = ['0', '1', '2', '3', '4', '5', '6', '7'];
+
     //影像
     var imgMap = new Cesium.UrlTemplateImageryProvider({
       url: tdtUrl + 'DataServer?T=img_w&x={x}&y={y}&l={z}&tk=' + token,
-      subdomains: subdomains,
-      
+      subdomains: ['0', '1', '2', '3', '4', '5', '6', '7'],
+
       tilingScheme: new Cesium.WebMercatorTilingScheme(),
       maximumLevel: 18,
     });
@@ -79,7 +88,7 @@ export default {
     //国界
     var iboMap = new Cesium.UrlTemplateImageryProvider({
       url: tdtUrl + 'DataServer?T=ibo_w&x={x}&y={y}&l={z}&tk=' + token,
-      subdomains: subdomains,
+      subdomains: ['0', '1', '2', '3', '4', '5', '6', '7'],
       tilingScheme: new Cesium.WebMercatorTilingScheme(),
       maximumLevel: 10
     });
@@ -158,10 +167,6 @@ export default {
         // heading_show.innerHTML = heading_String;
       }
     }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
-
-
-
-
   }
 };
 </script>

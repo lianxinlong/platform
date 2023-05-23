@@ -12,8 +12,6 @@ import data from '@/components/data'
 
 const routerHistory = createWebHistory()
 
-
-
 const routes = [
   { path: '/', name: 'cesiumContainer', component: cesiumContainer },
   { path: '/home', name: 'home', component: home },

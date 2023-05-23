@@ -1,6 +1,9 @@
 import { createApp } from 'vue'
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
 import App from './App.vue'
-import Vue from 'vue'
+
+// import Vue from 'vue'
 import router from './router'
 
 // Vue.config.productionTip=false
@@ -8,7 +11,8 @@ import router from './router'
 //     console.log("global", err);
 //     message.error("出错了");
 //   };
+// Vue.use(ElementUI)
 
-const app =createApp(App)
-app.use(router)
-app.mount('#app')
+const app = createApp(App)
+app.use(ElementPlus)
+app.use(router).mount('#app')
