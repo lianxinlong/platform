@@ -1,16 +1,19 @@
 <template>
-
-    <div id="cesiumContainer">
-      <div id="latlng_show">
-        <div style="float:left;">经度：<span id="longitude_show"></span></div>
-        <div style="float:left;">纬度：<span id="latitude_show"></span></div>
-        <div style="float:left;">视角高：<span id="altitude_show"></span>km</div>
-        <!-- <div style="float:left;"> 海拔高：<span id="elevation_show"></span>m</div>
+  <div>
+    <router-link to="/">主页</router-link>
+    <router-link to="/home">首页</router-link>
+    <router-link to="/data">数据</router-link>
+  </div>
+  <div id="cesiumContainer">
+    <div id="latlng_show">
+      <div style="float:left;">经度：<span id="longitude_show"></span></div>
+      <div style="float:left;">纬度：<span id="latitude_show"></span></div>
+      <div style="float:left;">视角高：<span id="altitude_show"></span>km</div>
+      <!-- <div style="float:left;"> 海拔高：<span id="elevation_show"></span>m</div>
         <div style="float:left;">俯仰角：<span id="pitch_show"></span></div>
         <div style="float:left;">方向：<span id="heading_show"></span></div> -->
-      </div>
     </div>
-
+  </div>
 </template>
 
 <script>
@@ -20,11 +23,7 @@ export default {
     msg: String
   },
   mounted() {
-    Cesium.Ion.defaultAccessToken =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3ZTA3NzY2ZC1lMDdmLTRjODAtYmI2My05NTI3MjNkYjNjZmEiLCJpZCI6MzczOTAsImlhdCI6MTYwNDk5Mzg5OX0.BYBiqacYVkJz-nXU1qopx7PKpDTfLe4490f-L1HuybQ';
-    var token = '65f3777bb7d614820e3286b4572abf6a';
-    var tdtUrl = 'https://t{s}.tianditu.gov.cn/';
-    var subdomains = ['0', '1', '2', '3', '4', '5', '6', '7'];
+
 
     var viewer = new Cesium.Viewer("cesiumContainer", {
       animation: false, //是否创建动画小器件，左下角仪表
@@ -43,8 +42,8 @@ export default {
       imageryProviderViewModels: Cesium.createDefaultImageryProviderViewModels(), //可供BaseLayerPicker选择的图像图层ProviderViewModel数组
       selectedTerrainProviderViewModel: undefined, //当前地形图层的显示模型，仅baseLayerPicker设为true有意义
       terrainProviderViewModels: Cesium.createDefaultTerrainProviderViewModels(), //可供BaseLayerPicker选择的地形图层ProviderViewModel数组
-      imageryProvider: new Cesium.UrlTemplateImageryProvider(),//影像图层提供者，仅baseLayerPicker设为false有意义
-      terrainProvider: new Cesium.EllipsoidTerrainProvider(), //地形图层提供者，仅baseLayerPicker设为false有意义
+      // imageryProvider: new Cesium.UrlTemplateImageryProvider(),//影像图层提供者，仅baseLayerPicker设为false有意义
+      // terrainProvider: new Cesium.EllipsoidTerrainProvider(), //地形图层提供者，仅baseLayerPicker设为false有意义
       fullscreenElement: document.body, //全屏时渲染的HTML元素,
       useDefaultRenderLoop: true, //如果需要控制渲染循环，则设为true
       targetFrameRate: undefined, //使用默认render loop时的帧率
@@ -61,11 +60,16 @@ export default {
     viewer._cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
 
     viewer.imageryLayers.remove(viewer.imageryLayers.get(0));//默认的Cesium会加载一个bingMap底图，这个地图网络不太好，一般要先去掉这个默认的
-    
+    Cesium.Ion.defaultAccessToken =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3ZTA3NzY2ZC1lMDdmLTRjODAtYmI2My05NTI3MjNkYjNjZmEiLCJpZCI6MzczOTAsImlhdCI6MTYwNDk5Mzg5OX0.BYBiqacYVkJz-nXU1qopx7PKpDTfLe4490f-L1HuybQ';
+    var token = '65f3777bb7d614820e3286b4572abf6a';
+    var tdtUrl = 'https://t{s}.tianditu.gov.cn/';
+    var subdomains = ['0', '1', '2', '3', '4', '5', '6', '7'];
     //影像
     var imgMap = new Cesium.UrlTemplateImageryProvider({
       url: tdtUrl + 'DataServer?T=img_w&x={x}&y={y}&l={z}&tk=' + token,
       subdomains: subdomains,
+      
       tilingScheme: new Cesium.WebMercatorTilingScheme(),
       maximumLevel: 18,
     });
@@ -167,8 +171,9 @@ export default {
 // .cesiumContainer {
 //   height: 100%;
 
-  #cesiumContainer {
-    height: 100%;
-  }
+#cesiumContainer {
+  height: 100%;
+}
+
 // }
 </style>
