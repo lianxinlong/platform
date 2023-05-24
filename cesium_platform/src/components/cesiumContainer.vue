@@ -1,22 +1,17 @@
 <template>
-  <div>
-    <router-link to="/">主页</router-link>
-    <router-link to="/home">首页</router-link>
-    <router-link to="/data">数据</router-link>
+  <div class="common-layout">
+    <el-container>
+      <el-header>
+        <router-link to="/">主页</router-link>
+        <router-link to="/home">首页</router-link>
+        <router-link to="/data">数据</router-link>
+      </el-header>
+      <el-main>
+        <div id="cesiumContainer">
+        </div>
+      </el-main>
+    </el-container>
   </div>
-  <div>1111</div>
-  <div id="cesiumContainer">
-    <div id="latlng_show">
-      <div style="float:left;">经度：<span id="longitude_show"></span></div>
-      <div style="float:left;">纬度：<span id="latitude_show"></span></div>
-      <div style="float:left;">视角高：<span id="altitude_show"></span>km</div>
-      <!-- <div style="float:left;"> 海拔高：<span id="elevation_show"></span>m</div>
-        <div style="float:left;">俯仰角：<span id="pitch_show"></span></div>
-        <div style="float:left;">方向：<span id="heading_show"></span></div> -->
-    </div>
-    <div>2222</div>
-  </div>
-  <div>3333</div>
 </template>
 
 <script>
@@ -25,20 +20,20 @@ export default {
   // props: {
   //   msg: String
   // },
-  data(){
-      return{
-        defaultAccessToken:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3ZTA3NzY2ZC1lMDdmLTRjODAtYmI2My05NTI3MjNkYjNjZmEiLCJpZCI6MzczOTAsImlhdCI6MTYwNDk5Mzg5OX0.BYBiqacYVkJz-nXU1qopx7PKpDTfLe4490f-L1HuybQ',
-        token:'65f3777bb7d614820e3286b4572abf6a',
-        tdtUrl:'https://t{s}.tianditu.gov.cn/'
-      }
+  data() {
+    return {
+      defaultAccessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3ZTA3NzY2ZC1lMDdmLTRjODAtYmI2My05NTI3MjNkYjNjZmEiLCJpZCI6MzczOTAsImlhdCI6MTYwNDk5Mzg5OX0.BYBiqacYVkJz-nXU1qopx7PKpDTfLe4490f-L1HuybQ',
+      token: '65f3777bb7d614820e3286b4572abf6a',
+      tdtUrl: 'https://t{s}.tianditu.gov.cn/'
+    }
   },
   mounted() {
     Cesium.Ion.defaultAccessToken = this.defaultAccessToken;
-    var token = this.token;
-    var tdtUrl = this.tdtUrl;
-    // var subdomains = ['0', '1', '2', '3', '4', '5', '6', '7'];
+    const token = this.token;
+    const tdtUrl = this.tdtUrl;
+    // const subdomains = ['0', '1', '2', '3', '4', '5', '6', '7'];
 
-    var viewer = new Cesium.Viewer("cesiumContainer", {
+    const viewer = new Cesium.Viewer("cesiumContainer", {
       animation: false, //是否创建动画小器件，左下角仪表
       baseLayerPicker: false, //是否显示图层选择器
       fullscreenButton: false, //是否显示全屏按钮
@@ -73,20 +68,27 @@ export default {
     viewer._cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
 
     viewer.imageryLayers.remove(viewer.imageryLayers.get(0));//默认的Cesium会加载一个bingMap底图，这个地图网络不太好，一般要先去掉这个默认的
-
-    //影像
-    var imgMap = new Cesium.UrlTemplateImageryProvider({
-      url: tdtUrl + 'DataServer?T=img_w&x={x}&y={y}&l={z}&tk=' + token,
-      subdomains: ['0', '1', '2', '3', '4', '5', '6', '7'],
-
+    
+    const imgMap = new Cesium.UrlTemplateImageryProvider({
+      url: "https://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer/tile/{z}/{y}/{x}",
       tilingScheme: new Cesium.WebMercatorTilingScheme(),
-      maximumLevel: 18,
     });
     viewer.imageryLayers.addImageryProvider(imgMap);
+    //影像
+    // const imgMap = new Cesium.UrlTemplateImageryProvider({
+    //   url: tdtUrl + 'DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=' + token,
+    //   subdomains: ['0', '1', '2', '3', '4', '5', '6', '7'],
+
+    //   tilingScheme: new Cesium.WebMercatorTilingScheme(),
+    //   maximumLevel: 18,
+    // });
+    // viewer.imageryLayers.addImageryProvider(imgMap);
+    // viewer.imageryLayers.addImageryProvider(imgMap).hue=3;
+    // viewer.imageryLayers.addImageryProvider(imgMap).contrast=-1.2;
     // window.viewer = viewer;
 
     //国界
-    var iboMap = new Cesium.UrlTemplateImageryProvider({
+    const iboMap = new Cesium.UrlTemplateImageryProvider({
       url: tdtUrl + 'DataServer?T=ibo_w&x={x}&y={y}&l={z}&tk=' + token,
       subdomains: ['0', '1', '2', '3', '4', '5', '6', '7'],
       tilingScheme: new Cesium.WebMercatorTilingScheme(),
@@ -95,24 +97,37 @@ export default {
     viewer.imageryLayers.addImageryProvider(iboMap);
 
     //地形
-    // var terrainUrls = new Array();
-
-    // for (var i = 0; i < subdomains.length; i++) {
-    //   var url = tdtUrl.replace('{s}', subdomains[i]) + 'mapservice/swdx?tk=' + token;
+    // const terrainUrls = new Array();
+    // const subdomains= ['0', '1', '2', '3', '4', '5', '6', '7'];
+    // for (const i = 0; i < subdomains.length; i++) {
+    //   const url = tdtUrl.replace('{s}', subdomains[i]) + 'DataServer?T=elv_c&tk=' + token;
     //   terrainUrls.push(url);
     // }
 
-    // var provider = new Cesium.TerrainProvider({
+    // const provider = new Cesium.CesiumTerrainProvider({
     //   urls: terrainUrls
     // });
+
     // viewer.terrainProvider = provider;
 
     // viewer.scene.globe.depthTestAgainstTerrain = false;//标绘将位于地形的顶部
+    // viewer.scene.skyBox.show = false //关闭天空盒，否则会显示天空颜色
 
-    viewer.scene.globe.enableLighting = true; //对大气和雾启用动态照明效果
+    // viewer.scene.backgroundColor = new Cesium.Color(0.0, 0.0, 0.0, 0.0);    //背景透明
+
+
+    // viewer.scene.skyAtmosphere.show = false  //关闭大气
+
+    // viewer.scene.fxaa = true; //抗锯齿
+    // viewer.scene.postProcessStages.fxaa.enabled = true;
+
+    // viewer.scene.moon.show = false
+    // viewer.scene.sun.show = false    //清除月亮太阳
+
+    // viewer.scene.globe.enableLighting = false; //对大气和雾启用动态照明效果
 
     //添加行政区矢量数据
-    var arcgisProvider = new Cesium.ArcGisMapServerImageryProvider({
+    const arcgisProvider = new Cesium.ArcGisMapServerImageryProvider({
       url: "http://localhost:6080/arcgis/rest/services/重庆行政区划/MapServer",
     });
     viewer.imageryLayers.addImageryProvider(arcgisProvider);
@@ -131,42 +146,6 @@ export default {
         // 定位完成之后的回调函数
       }
     });
-
-
-    // 跟随鼠标获取经纬度和海拔
-    var longitude_show = document.getElementById('longitude_show');
-    var latitude_show = document.getElementById('latitude_show');
-    var altitude_show = document.getElementById('altitude_show');
-    // var elevation_show = document.getElementById('elevation_show');
-    // var pitch_show = document.getElementById('pitch_show');
-    // var heading_show = document.getElementById('heading_show');
-
-    var canvas = viewer.scene.canvas;
-    //具体事件的实现
-    var ellipsoid = viewer.scene.globe.ellipsoid;
-    var handler = new Cesium.ScreenSpaceEventHandler(canvas);
-    handler.setInputAction((movement) => {
-      //捕获椭球体，将笛卡尔二维平面坐标转为椭球体的笛卡尔三维坐标，返回球体表面的点
-      var cartesian = viewer.camera.pickEllipsoid(movement.endPosition, ellipsoid);
-      if (cartesian) {
-        //将笛卡尔三维坐标转为地图坐标（弧度）
-        var cartographic = viewer.scene.globe.ellipsoid.cartesianToCartographic(cartesian);
-        //将地图坐标（弧度）转为十进制的度数
-        var lat_String = Cesium.Math.toDegrees(cartographic.latitude).toFixed(4);
-        var log_String = Cesium.Math.toDegrees(cartographic.longitude).toFixed(4);
-        var alti_String = (viewer.camera.positionCartographic.height / 1000).toFixed(2);
-        // var elec_String = Number(viewer.scene.globe.getHeight(cartographic)).toFixed(2);
-        // var pitch_String = (viewer.camera.pitch).toFixed(2);
-        // var heading_String = (viewer.camera.heading).toFixed(2);
-
-        longitude_show.innerHTML = log_String;
-        latitude_show.innerHTML = lat_String;
-        altitude_show.innerHTML = alti_String;//视角高度 km
-        // elevation_show.innerHTML = elec_String;//海拔
-        // pitch_show.innerHTML = pitch_String;
-        // heading_show.innerHTML = heading_String;
-      }
-    }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
   }
 };
 </script>
@@ -177,7 +156,30 @@ export default {
 //   height: 100%;
 
 #cesiumContainer {
-  height: 100%;
+  height: 80%;
+}
+
+.el-header,
+.el-footer {
+  background-color: #B3C0D1;
+  color: #333;
+  text-align: center;
+  line-height: 60px;
+}
+
+.el-aside {
+  background-color: #D3DCE6;
+  color: #333;
+  text-align: center;
+  line-height: 800px;
+}
+
+.el-main {
+  background-color: #E9EEF3;
+  color: #333;
+  text-align: center;
+  // line-height: 800px;
+  padding: 0px;
 }
 
 // }

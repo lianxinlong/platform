@@ -1,11 +1,5 @@
 <template>
-  <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
-  <!-- <cesiumContainer/> -->
-  <div id="app">
-    <!-- <router-link to="/">主页</router-link>
-    <router-link to="/home">首页</router-link>
-    <router-link to="/data">数据</router-link> -->
-  </div>
+  <div id="app"></div>
   <router-view/>
 </template>
 

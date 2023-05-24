@@ -7,15 +7,15 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 //组件模块
 import cesiumContainer from '@/components/cesiumContainer'
-import home from '@/components/home'
-import data from '@/components/data'
+import Home from '@/components/Home'
+import Data from '@/components/Data'
 
 const routerHistory = createWebHistory()
 
 const routes = [
-  { path: '/', name: 'cesiumContainer', component: cesiumContainer },
-  { path: '/home', name: 'home', component: home },
-  { path: '/data', name: 'data', component: data },
+  { path: '/', name: 'App', component: cesiumContainer },
+  { path: '/home', name: 'home', component: Home },
+  { path: '/data', name: 'data', component: Data },
 ]
 
 const router = createRouter({
