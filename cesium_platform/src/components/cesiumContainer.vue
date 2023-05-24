@@ -1,20 +1,18 @@
 <template>
   <div class="common-layout">
-    <el-container>
-      <el-header>
-        <router-link to="/">主页</router-link>
-        <router-link to="/home">首页</router-link>
-        <router-link to="/data">数据</router-link>
-      </el-header>
-      <el-main>
-        <div id="cesiumContainer">
-        </div>
-      </el-main>
-    </el-container>
+    <!-- <BorderBox11 title="BorderBox11"> -->
+      <router-link to="/">主页</router-link>
+      <router-link to="/home">首页</router-link>
+      <router-link to="/data">数据</router-link>
+
+      <div id="cesiumContainer"></div>
+    <!-- </BorderBox11> -->
   </div>
 </template>
 
 <script>
+// import { BorderBox11 } from '@dataview/datav-vue3';
+
 export default {
   name: "cesiumContainer",
   // props: {
@@ -29,11 +27,11 @@ export default {
   },
   mounted() {
     Cesium.Ion.defaultAccessToken = this.defaultAccessToken;
-    const token = this.token;
-    const tdtUrl = this.tdtUrl;
-    // const subdomains = ['0', '1', '2', '3', '4', '5', '6', '7'];
+    var token = this.token;
+    var tdtUrl = this.tdtUrl;
+    // var subdomains = ['0', '1', '2', '3', '4', '5', '6', '7'];
 
-    const viewer = new Cesium.Viewer("cesiumContainer", {
+    var viewer = new Cesium.Viewer("cesiumContainer", {
       animation: false, //是否创建动画小器件，左下角仪表
       baseLayerPicker: false, //是否显示图层选择器
       fullscreenButton: false, //是否显示全屏按钮
@@ -68,27 +66,20 @@ export default {
     viewer._cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
 
     viewer.imageryLayers.remove(viewer.imageryLayers.get(0));//默认的Cesium会加载一个bingMap底图，这个地图网络不太好，一般要先去掉这个默认的
-    
-    const imgMap = new Cesium.UrlTemplateImageryProvider({
-      url: "https://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer/tile/{z}/{y}/{x}",
+
+    //影像
+    var imgMap = new Cesium.UrlTemplateImageryProvider({
+      url: tdtUrl + 'DataServer?T=img_w&x={x}&y={y}&l={z}&tk=' + token,
+      subdomains: ['0', '1', '2', '3', '4', '5', '6', '7'],
+
       tilingScheme: new Cesium.WebMercatorTilingScheme(),
+      maximumLevel: 18,
     });
     viewer.imageryLayers.addImageryProvider(imgMap);
-    //影像
-    // const imgMap = new Cesium.UrlTemplateImageryProvider({
-    //   url: tdtUrl + 'DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=' + token,
-    //   subdomains: ['0', '1', '2', '3', '4', '5', '6', '7'],
-
-    //   tilingScheme: new Cesium.WebMercatorTilingScheme(),
-    //   maximumLevel: 18,
-    // });
-    // viewer.imageryLayers.addImageryProvider(imgMap);
-    // viewer.imageryLayers.addImageryProvider(imgMap).hue=3;
-    // viewer.imageryLayers.addImageryProvider(imgMap).contrast=-1.2;
     // window.viewer = viewer;
 
     //国界
-    const iboMap = new Cesium.UrlTemplateImageryProvider({
+    var iboMap = new Cesium.UrlTemplateImageryProvider({
       url: tdtUrl + 'DataServer?T=ibo_w&x={x}&y={y}&l={z}&tk=' + token,
       subdomains: ['0', '1', '2', '3', '4', '5', '6', '7'],
       tilingScheme: new Cesium.WebMercatorTilingScheme(),
@@ -97,37 +88,24 @@ export default {
     viewer.imageryLayers.addImageryProvider(iboMap);
 
     //地形
-    // const terrainUrls = new Array();
-    // const subdomains= ['0', '1', '2', '3', '4', '5', '6', '7'];
-    // for (const i = 0; i < subdomains.length; i++) {
-    //   const url = tdtUrl.replace('{s}', subdomains[i]) + 'DataServer?T=elv_c&tk=' + token;
+    // var terrainUrls = new Array();
+
+    // for (var i = 0; i < subdomains.length; i++) {
+    //   var url = tdtUrl.replace('{s}', subdomains[i]) + 'mapservice/swdx?tk=' + token;
     //   terrainUrls.push(url);
     // }
 
-    // const provider = new Cesium.CesiumTerrainProvider({
+    // var provider = new Cesium.TerrainProvider({
     //   urls: terrainUrls
     // });
-
     // viewer.terrainProvider = provider;
 
     // viewer.scene.globe.depthTestAgainstTerrain = false;//标绘将位于地形的顶部
-    // viewer.scene.skyBox.show = false //关闭天空盒，否则会显示天空颜色
 
-    // viewer.scene.backgroundColor = new Cesium.Color(0.0, 0.0, 0.0, 0.0);    //背景透明
-
-
-    // viewer.scene.skyAtmosphere.show = false  //关闭大气
-
-    // viewer.scene.fxaa = true; //抗锯齿
-    // viewer.scene.postProcessStages.fxaa.enabled = true;
-
-    // viewer.scene.moon.show = false
-    // viewer.scene.sun.show = false    //清除月亮太阳
-
-    // viewer.scene.globe.enableLighting = false; //对大气和雾启用动态照明效果
+    viewer.scene.globe.enableLighting = true; //对大气和雾启用动态照明效果
 
     //添加行政区矢量数据
-    const arcgisProvider = new Cesium.ArcGisMapServerImageryProvider({
+    var arcgisProvider = new Cesium.ArcGisMapServerImageryProvider({
       url: "http://localhost:6080/arcgis/rest/services/重庆行政区划/MapServer",
     });
     viewer.imageryLayers.addImageryProvider(arcgisProvider);
@@ -155,32 +133,11 @@ export default {
 // .cesiumContainer {
 //   height: 100%;
 
-#cesiumContainer {
+.cesiumContainer {
   height: 80%;
+  // width:60%;
 }
 
-.el-header,
-.el-footer {
-  background-color: #B3C0D1;
-  color: #333;
-  text-align: center;
-  line-height: 60px;
-}
-
-.el-aside {
-  background-color: #D3DCE6;
-  color: #333;
-  text-align: center;
-  line-height: 800px;
-}
-
-.el-main {
-  background-color: #E9EEF3;
-  color: #333;
-  text-align: center;
-  // line-height: 800px;
-  padding: 0px;
-}
 
 // }
 </style>
