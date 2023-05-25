@@ -1,19 +1,132 @@
 <template>
   <div class="common-layout">
-    <!-- <BorderBox11 title="BorderBox11"> -->
-      <router-link to="/">主页</router-link>
-      <router-link to="/home">首页</router-link>
-      <router-link to="/data">数据</router-link>
-
-      <div id="cesiumContainer"></div>
-    <!-- </BorderBox11> -->
+    <el-container>
+      <el-header height='20%'>
+        <div>
+            <router-link to="/">地质灾害监测预警平台</router-link>
+          <!-- <a2>
+            <router-link to="/home">首页</router-link>
+            <router-link to="/data">数据</router-link>
+          </a2> -->
+        </div>
+      </el-header>
+    </el-container>
+    <el-container>
+      <el-aside height='80%' width="20%">
+        <div ref="Chart" id="Chart" :style="{ width: '100%', height: '50%' }"></div>
+        <div ref="Chart1" id="Chart1" :style="{ width: '100%', height: '50%' }"></div>
+      </el-aside>
+      <el-main>
+        <div id="cesiumContainer" style="height:100%"></div>
+      </el-main>
+      <el-aside height='80%' width="20%">
+        <div ref="Chart2" id="Chart2" :style="{ width: '100%', height: '50%' }"></div>
+        <div ref="Chart3" id="Chart3" :style="{ width: '100%', height: '50%' }"></div>
+      </el-aside>
+    </el-container>
   </div>
 </template>
 
 <script>
-// import { BorderBox11 } from '@dataview/datav-vue3';
+import { getCurrentInstance, onMounted } from 'vue';
+
 
 export default {
+  name: "echartsBox",
+  setup() {
+    // 通过 internalInstance.appContext.config.globalProperties 获取全局属性或方法
+    let internalInstance = getCurrentInstance();
+    let echarts = internalInstance.appContext.config.globalProperties.$echarts;
+ 
+    onMounted(() => {
+      const dom = document.getElementById('Chart');
+      const Chart = echarts.init(dom); // 初始化echarts实例
+      const option = {
+        xAxis: {
+          type: 'category',
+          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            data: [820, 932, 901, 934, 1290, 1330, 1320],
+            type: 'line',
+            smooth: true
+          }
+        ]
+      };
+      // 设置实例参数
+      Chart.setOption(option);
+
+      const dom1 = document.getElementById('Chart1');
+      const Chart1 = echarts.init(dom1); // 初始化echarts实例
+      const option1 = {
+        xAxis: {
+          type: 'category',
+          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            data: [820, 932, 901, 934, 1290, 1330, 1320],
+            type: 'line',
+            smooth: true
+          }
+        ]
+      };
+      // 设置实例参数
+      Chart1.setOption(option1);
+
+      const dom2 = document.getElementById('Chart2');
+      const Chart2 = echarts.init(dom2); // 初始化echarts实例
+      const option2 = {
+        xAxis: {
+          type: 'category',
+          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            data: [820, 932, 901, 934, 1290, 1330, 1320],
+            type: 'line',
+            smooth: true
+          }
+        ]
+      };
+      // 设置实例参数
+      Chart2.setOption(option2);
+
+      const dom3 = document.getElementById('Chart3');
+      const Chart3 = echarts.init(dom3); // 初始化echarts实例
+      const option3 = {
+        xAxis: {
+          type: 'category',
+          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            data: [820, 932, 901, 934, 1290, 1330, 1320],
+            type: 'line',
+            smooth: true
+          }
+        ]
+      };
+      // 设置实例参数
+      Chart3.setOption(option3);
+      
+    });
+    return {};
+  },
+
   name: "cesiumContainer",
   // props: {
   //   msg: String
@@ -78,6 +191,7 @@ export default {
     viewer.imageryLayers.addImageryProvider(imgMap);
     // window.viewer = viewer;
 
+
     //国界
     var iboMap = new Cesium.UrlTemplateImageryProvider({
       url: tdtUrl + 'DataServer?T=ibo_w&x={x}&y={y}&l={z}&tk=' + token,
@@ -104,27 +218,34 @@ export default {
 
     viewer.scene.globe.enableLighting = true; //对大气和雾启用动态照明效果
 
+ 
+
     //添加行政区矢量数据
     var arcgisProvider = new Cesium.ArcGisMapServerImageryProvider({
-      url: "http://localhost:6080/arcgis/rest/services/重庆行政区划/MapServer",
+      url: "http://localhost:6080/arcgis/rest/services/重庆行政区划黄色/MapServer",
+    });
+    viewer.imageryLayers.addImageryProvider(arcgisProvider);
+
+   //添加重庆市范围矢量数据
+   var arcgisProvider = new Cesium.ArcGisMapServerImageryProvider({
+      url: "http://localhost:6080/arcgis/rest/services/重庆市/MapServer",
     });
     viewer.imageryLayers.addImageryProvider(arcgisProvider);
 
 
-
     //定位到重庆
     viewer.camera.flyTo({
-      destination: Cesium.Cartesian3.fromDegrees(107.33, 29.85, 600000),
+      destination: Cesium.Cartesian3.fromDegrees(107.8521, 28.0565, 449770),
       orientation: {
-        heading: Cesium.Math.toRadians(348.4202942851978),
-        pitch: Cesium.Math.toRadians(-89.74026687972041),
+        heading: Cesium.Math.toRadians(350.077213),
+        pitch: Cesium.Math.toRadians(-66.4631042),
         roll: Cesium.Math.toRadians(0)
       },
       complete: function callback() {
         // 定位完成之后的回调函数
       }
     });
-  }
+  },
 };
 </script>
 
@@ -133,11 +254,42 @@ export default {
 // .cesiumContainer {
 //   height: 100%;
 
-.cesiumContainer {
-  height: 80%;
-  // width:60%;
+// .cesiumContainer {
+//   height: 850px;
+//   // width:60%;
+// }
+div>a {
+  text-align: right;
 }
 
+.el-container {
+  padding: 0px;
+  margin: 0px;
+  height: 100%;
+}
+
+.el-header,
+.el-footer {
+  background-color: #B3C0D1;
+  color: #333;
+  text-align: center;
+  line-height: 60px;
+}
+
+.el-aside {
+  background-color: #D3DCE6;
+  color: #333;
+  text-align: center;
+  height: 850px;
+}
+
+.el-main {
+  background-color: 00E9EEF3;
+  color: #333;
+  text-align: center;
+  height: 850px;
+  padding: 0px;
+}
 
 // }
 </style>

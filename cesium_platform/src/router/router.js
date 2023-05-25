@@ -1,7 +1,3 @@
-// import { createApp } from 'vue'
-// import Vue from 'vue'
-// import VueRouter from 'vue-router'
-// import Router from 'vue-router'
 import { createRouter, createWebHistory } from 'vue-router'
 
 

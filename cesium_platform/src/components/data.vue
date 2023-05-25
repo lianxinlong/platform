@@ -14,7 +14,9 @@
         </el-container>
     </div>
 </template>
-<style>
+
+
+<style lang="scss" scoped>
 .el-header,
 .el-footer {
     background-color: #B3C0D1;
@@ -35,8 +37,7 @@
     color: #333;
     text-align: center;
     /* line-height: 800px; */
-    padding: 0px;
-}
-
+    /* padding: 0px; */
+    }
 </style>
 
