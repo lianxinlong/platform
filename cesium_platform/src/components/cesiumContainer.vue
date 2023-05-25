@@ -1,13 +1,11 @@
 <template>
   <div class="common-layout">
     <el-container>
-      <el-header height='20%'>
+      <el-header height='30%'>
         <div>
-            <router-link to="/">地质灾害监测预警平台</router-link>
-          <!-- <a2>
-            <router-link to="/home">首页</router-link>
-            <router-link to="/data">数据</router-link>
-          </a2> -->
+          <router-link to="/" class="y" active-class="y-link--Active">地质灾害监测预警平台</router-link>
+          <router-link to="/home" class="h" active-class="h-link--Active">首页</router-link>
+          <router-link to="/data" class="d" active-class="d-link--Active">数据</router-link>
         </div>
       </el-header>
     </el-container>
@@ -37,7 +35,7 @@ export default {
     // 通过 internalInstance.appContext.config.globalProperties 获取全局属性或方法
     let internalInstance = getCurrentInstance();
     let echarts = internalInstance.appContext.config.globalProperties.$echarts;
- 
+
     onMounted(() => {
       const dom = document.getElementById('Chart');
       const Chart = echarts.init(dom); // 初始化echarts实例
@@ -70,32 +68,67 @@ export default {
         yAxis: {
           type: 'value'
         },
-        series: [
-          {
-            data: [820, 932, 901, 934, 1290, 1330, 1320],
-            type: 'line',
-            smooth: true
+        series: [{
+          data: [120, 200, 150, 80, 70, 110, 130],
+          type: 'bar',
+          showBackground: true,
+          backgroundStyle: {
+            color: 'rgba(220, 220, 220, 0.8)'
           }
-        ]
+        }]
       };
+
       // 设置实例参数
       Chart1.setOption(option1);
 
       const dom2 = document.getElementById('Chart2');
       const Chart2 = echarts.init(dom2); // 初始化echarts实例
       const option2 = {
-        xAxis: {
-          type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        // title: {
+        //   text: '南丁格尔玫瑰图',
+        //   subtext: '纯属虚构',
+        //   left: 'center'
+        // },
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)'
         },
-        yAxis: {
-          type: 'value'
+        legend: {
+          left: 'center',
+          top: 'bottom',
+          data: ['rose1', 'rose2', 'rose3', 'rose4', 'rose5', 'rose6', 'rose7', 'rose8']
         },
+        // toolbox: {
+        //   show: true,
+        //   feature: {
+        //     mark: { show: true },
+        //     dataView: { show: true, readOnly: false },
+        //     magicType: {
+        //       show: true,
+        //       type: ['pie', 'funnel']
+        //     },
+        //     restore: { show: true },
+        //     saveAsImage: { show: true }
+        //   }
+        // },
         series: [
+
           {
-            data: [820, 932, 901, 934, 1290, 1330, 1320],
-            type: 'line',
-            smooth: true
+            name: '面积模式',
+            type: 'pie',
+            radius: [25, 110],
+            center: ['50%', '50%'],
+            roseType: 'area',
+            data: [
+              { value: 10, name: 'rose1' },
+              { value: 5, name: 'rose2' },
+              { value: 15, name: 'rose3' },
+              { value: 25, name: 'rose4' },
+              { value: 20, name: 'rose5' },
+              { value: 35, name: 'rose6' },
+              { value: 30, name: 'rose7' },
+              { value: 40, name: 'rose8' }
+            ]
           }
         ]
       };
@@ -105,24 +138,51 @@ export default {
       const dom3 = document.getElementById('Chart3');
       const Chart3 = echarts.init(dom3); // 初始化echarts实例
       const option3 = {
-        xAxis: {
-          type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        // title: {
+        //   text: '基础雷达图'
+        // },
+        tooltip: {},
+        legend: {
+          data: ['预算分配（Allocated Budget）', '实际开销（Actual Spending）']
         },
-        yAxis: {
-          type: 'value'
+        radar: {
+          // shape: 'circle',
+          name: {
+            textStyle: {
+              color: '#fff',
+              backgroundColor: '#999',
+              borderRadius: 3,
+              padding: [3, 5]
+            }
+          },
+          indicator: [
+            { name: '销售（sales）', max: 6500 },
+            { name: '管理（Administration）', max: 16000 },
+            { name: '信息技术（Information Techology）', max: 30000 },
+            { name: '客服（Customer Support）', max: 38000 },
+            { name: '研发（Development）', max: 52000 },
+            { name: '市场（Marketing）', max: 25000 }
+          ]
         },
-        series: [
-          {
-            data: [820, 932, 901, 934, 1290, 1330, 1320],
-            type: 'line',
-            smooth: true
-          }
-        ]
+        series: [{
+          name: '预算 vs 开销（Budget vs spending）',
+          type: 'radar',
+          // areaStyle: {normal: {}},
+          data: [
+            {
+              value: [4300, 10000, 28000, 35000, 50000, 19000],
+              name: '预算分配（Allocated Budget）'
+            },
+            {
+              value: [5000, 14000, 28000, 31000, 42000, 21000],
+              name: '实际开销（Actual Spending）'
+            }
+          ]
+        }]
       };
       // 设置实例参数
       Chart3.setOption(option3);
-      
+
     });
     return {};
   },
@@ -218,17 +278,17 @@ export default {
 
     viewer.scene.globe.enableLighting = true; //对大气和雾启用动态照明效果
 
- 
+
 
     //添加行政区矢量数据
     var arcgisProvider = new Cesium.ArcGisMapServerImageryProvider({
-      url: "http://localhost:6080/arcgis/rest/services/重庆行政区划黄色/MapServer",
+      url: "http://192.168.80.169:6080/arcgis/rest/services/重庆行政区划黄色/MapServer",
     });
     viewer.imageryLayers.addImageryProvider(arcgisProvider);
 
-   //添加重庆市范围矢量数据
-   var arcgisProvider = new Cesium.ArcGisMapServerImageryProvider({
-      url: "http://localhost:6080/arcgis/rest/services/重庆市/MapServer",
+    //添加重庆市范围矢量数据
+    var arcgisProvider = new Cesium.ArcGisMapServerImageryProvider({
+      url: "http://192.168.80.169:6080/arcgis/rest/services/重庆市/MapServer",
     });
     viewer.imageryLayers.addImageryProvider(arcgisProvider);
 
@@ -258,10 +318,18 @@ export default {
 //   height: 850px;
 //   // width:60%;
 // }
-div>a {
-  text-align: right;
+.y {
+  font-size: 1.6vw;
+  font-weight: bold;
+  color: #fff;
+  text-decoration: none;
+  letter-spacing: 3px;
+  background-color: #6495ed;
 }
 
+// .u-link--Active{
+//   background-color:#e0ffff;
+// }
 .el-container {
   padding: 0px;
   margin: 0px;

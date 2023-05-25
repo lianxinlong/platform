@@ -1,7 +1,7 @@
 <template>
     <div class="common-layout">
         <el-container>
-            <el-header>
+            <el-header background-image="http://www.cqdky.com/images/cqdky/logo.png">
                 <router-link to="/">主页</router-link>
                 <router-link to="/home">首页</router-link>
                 <router-link to="/data">数据</router-link>
@@ -120,7 +120,7 @@ export default {
 
         //添加行政区矢量数据
         var arcgisProvider = new Cesium.ArcGisMapServerImageryProvider({
-            url: "http://localhost:6080/arcgis/rest/services/重庆行政区划/MapServer",
+            url: "http://192.168.80.169:6080/arcgis/rest/services/重庆行政区划/MapServer",
         });
         viewer.imageryLayers.addImageryProvider(arcgisProvider);
 
