@@ -40,27 +40,29 @@ export default {
       const dom = document.getElementById('Chart');
       const Chart = echarts.init(dom); // 初始化echarts实例
       const option = {
+        tooltip: {},
         xAxis: {
           type: 'category',
+          boundaryGap: false,
           data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
         },
         yAxis: {
           type: 'value'
         },
-        series: [
-          {
-            data: [820, 932, 901, 934, 1290, 1330, 1320],
-            type: 'line',
-            smooth: true
-          }
-        ]
+        series: [{
+          data: [820, 932, 901, 934, 1290, 1330, 1320],
+          type: 'line',
+          areaStyle: {}
+        }]
       };
+
       // 设置实例参数
       Chart.setOption(option);
 
       const dom1 = document.getElementById('Chart1');
       const Chart1 = echarts.init(dom1); // 初始化echarts实例
       const option1 = {
+        tooltip: {},
         xAxis: {
           type: 'category',
           data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
@@ -143,39 +145,37 @@ export default {
         // },
         tooltip: {},
         legend: {
-          data: ['预算分配（Allocated Budget）', '实际开销（Actual Spending）']
+          data: ['预算分配', '实际开销']
         },
         radar: {
           // shape: 'circle',
-          name: {
-            textStyle: {
-              color: '#fff',
-              backgroundColor: '#999',
-              borderRadius: 3,
-              padding: [3, 5]
-            }
+          axisName: {
+            color: '#fff',
+            backgroundColor: '#999',
+            borderRadius: 3,
+            padding: [3, 5]
           },
           indicator: [
-            { name: '销售（sales）', max: 6500 },
-            { name: '管理（Administration）', max: 16000 },
-            { name: '信息技术（Information Techology）', max: 30000 },
-            { name: '客服（Customer Support）', max: 38000 },
-            { name: '研发（Development）', max: 52000 },
-            { name: '市场（Marketing）', max: 25000 }
+            { name: '销售', max: 6500 },
+            { name: '管理', max: 16000 },
+            { name: '信息技术', max: 30000 },
+            { name: '客服', max: 38000 },
+            { name: '研发', max: 52000 },
+            { name: '市场', max: 25000 }
           ]
         },
         series: [{
-          name: '预算 vs 开销（Budget vs spending）',
+          name: '预算 vs 开销',
           type: 'radar',
           // areaStyle: {normal: {}},
           data: [
             {
               value: [4300, 10000, 28000, 35000, 50000, 19000],
-              name: '预算分配（Allocated Budget）'
+              name: '预算分配'
             },
             {
               value: [5000, 14000, 28000, 31000, 42000, 21000],
-              name: '实际开销（Actual Spending）'
+              name: '实际开销'
             }
           ]
         }]
@@ -210,7 +210,7 @@ export default {
       fullscreenButton: false, //是否显示全屏按钮
       geocoder: false, //是否显示geocoder小器件，右上角查询按钮
       homeButton: false, //是否显示Home按钮
-      infoBox: false, //是否显示信息框
+      infoBox: true, //是否显示信息框
       sceneModePicker: false, //是否显示3D/2D选择器
       selectionIndicator: false, //是否显示选取指示器组件
       timeline: false, //是否显示时间轴

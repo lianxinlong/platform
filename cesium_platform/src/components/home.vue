@@ -2,14 +2,43 @@
     <div class="common-layout">
         <el-container>
             <el-header background-image="http://www.cqdky.com/images/cqdky/logo.png">
-                <router-link to="/">主页</router-link>
+                <router-link to="/">大屏</router-link>
                 <router-link to="/home">首页</router-link>
                 <router-link to="/data">数据</router-link>
             </el-header>
             <el-container>
-                <el-aside width="200px">Aside</el-aside>
+                <el-aside height='80%' width="18%">
+                    <el-row class="tac">
+                        <el-menu class="el-menu-vertical-demo" width="100%" opacity="1" default-active="2">
+                            <el-sub-menu index="1">
+                                <template #title>
+                                    <span>重庆市地质灾害二级专业监测预警项目</span>
+                                </template>
+                                <el-sub-menu index="1-1">
+                                    <template #title>城口区</template>
+                                    <el-menu-item index="1-1-1">立新滑坡</el-menu-item>
+                                    <el-menu-item index="1-1-2">坪坝寺滑坡</el-menu-item>
+                                </el-sub-menu>
+                                <el-sub-menu index="1-2">
+                                    <template #title>开州区</template>
+                                    <el-menu-item index="1-2-1">左家坪滑坡</el-menu-item>
+                                    <el-menu-item index="1-2-2">天津滑坡</el-menu-item>
+                                </el-sub-menu>
+                            </el-sub-menu>
+                            <el-menu-item index="2">
+                                <span>三峡库区云阳县龙洞场镇地质安全监测预警项目</span>
+                            </el-menu-item>
+                            <el-menu-item index="3">
+                                <span>三峡库区奉节县干沟子库岸专业监测预警项目</span>
+                            </el-menu-item>
+                            <el-menu-item index="4">
+                                <span>2021年地质灾害专业监测预警</span>
+                            </el-menu-item>
+                        </el-menu>
+                    </el-row>
+                </el-aside>
                 <el-main>
-                    <div id="cesiumContainer">
+                    <div id="cesiumContainer" style="height:100%">
                         <div id="latlng_show">
                             <div style="float:left;">经度：<span id="longitude_show"></span></div>
                             <div style="float:left;">纬度：<span id="latitude_show"></span></div>
@@ -51,7 +80,7 @@ export default {
             fullscreenButton: false, //是否显示全屏按钮
             geocoder: false, //是否显示geocoder小器件，右上角查询按钮
             homeButton: false, //是否显示Home按钮
-            infoBox: false, //是否显示信息框
+            infoBox: true, //是否显示信息框
             sceneModePicker: false, //是否显示3D/2D选择器
             selectionIndicator: false, //是否显示选取指示器组件
             timeline: false, //是否显示时间轴
@@ -120,7 +149,7 @@ export default {
 
         //添加行政区矢量数据
         var arcgisProvider = new Cesium.ArcGisMapServerImageryProvider({
-            url: "http://192.168.80.169:6080/arcgis/rest/services/重庆行政区划/MapServer",
+            url: "http://192.168.80.169:6080/arcgis/rest/services/重庆行政区划黄色/MapServer",
         });
         viewer.imageryLayers.addImageryProvider(arcgisProvider);
 
@@ -183,9 +212,14 @@ export default {
 // .cesiumContainer {
 //   height: 100%;
 
-.cesiumContainer {
-    height: 80%;
-    // width:60%;
+// .cesiumContainer {
+//     height: 80%;
+//     // width:60%;
+// }
+.el-container {
+    padding: 0px;
+    margin: 0px;
+    height: 100%;
 }
 
 .el-header,
@@ -201,17 +235,14 @@ export default {
     color: #333;
     text-align: center;
     line-height: 800px;
-    color: #333;
-    text-align: center;
-    line-height: 800px;
 }
 
 .el-main {
-    background-color: 00E9EEF3;
-    color: #333;
-    text-align: center;
-    // line-height: 800px;
-    padding: 0px;
+  background-color: 00E9EEF3;
+  color: #333;
+  text-align: center;
+  height: 850px;
+  padding: 0px;
 }
 
 // }
