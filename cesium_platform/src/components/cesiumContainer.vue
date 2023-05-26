@@ -40,17 +40,26 @@ export default {
       const dom = document.getElementById('Chart');
       const Chart = echarts.init(dom); // 初始化echarts实例
       const option = {
+        title:{
+          text: '设备在线率',
+          left: 'center'
+        },
         tooltip: {},
         xAxis: {
           type: 'category',
           boundaryGap: false,
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+          // splitNumber:8,
+          // minInterval:1,
+          axisLabel: {
+            interval:0, 
+          },
+          data: ['开州区', '奉节县', '云阳县', '万州区', '巫溪县', '忠县', '城口县','武隆区']
         },
         yAxis: {
           type: 'value'
         },
         series: [{
-          data: [820, 932, 901, 934, 1290, 1330, 1320],
+          data: [82, 93, 72, 93, 129, 133, 132, 120],
           type: 'line',
           areaStyle: {}
         }]
@@ -62,16 +71,24 @@ export default {
       const dom1 = document.getElementById('Chart1');
       const Chart1 = echarts.init(dom1); // 初始化echarts实例
       const option1 = {
+        title:{
+          text: '预警数据',
+          left: 'center'
+        },
         tooltip: {},
         xAxis: {
           type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+          // splitNumber:8,
+          axisLabel: {
+            interval:0, 
+          },
+          data: ['开州区', '奉节县', '云阳县', '万州区', '巫溪县', '忠县', '城口县','武隆区']
         },
         yAxis: {
           type: 'value'
         },
         series: [{
-          data: [120, 200, 150, 80, 70, 110, 130],
+          data: [12, 20, 15, 8, 7, 11, 13, 12],
           type: 'bar',
           showBackground: true,
           backgroundStyle: {
@@ -86,6 +103,10 @@ export default {
       const dom2 = document.getElementById('Chart2');
       const Chart2 = echarts.init(dom2); // 初始化echarts实例
       const option2 = {
+        title:{
+          text: '各区县地灾点',
+          left: 'center'
+        },
         // title: {
         //   text: '南丁格尔玫瑰图',
         //   subtext: '纯属虚构',
@@ -98,7 +119,7 @@ export default {
         legend: {
           left: 'center',
           top: 'bottom',
-          data: ['rose1', 'rose2', 'rose3', 'rose4', 'rose5', 'rose6', 'rose7', 'rose8']
+          data: ['开州区', '奉节县', '云阳县', '万州区', '巫溪县', '忠县', '城口县', '武隆区']
         },
         // toolbox: {
         //   show: true,
@@ -116,20 +137,20 @@ export default {
         series: [
 
           {
-            name: '面积模式',
+            name: '地灾数量',
             type: 'pie',
             radius: [25, 110],
             center: ['50%', '50%'],
             roseType: 'area',
             data: [
-              { value: 10, name: 'rose1' },
-              { value: 5, name: 'rose2' },
-              { value: 15, name: 'rose3' },
-              { value: 25, name: 'rose4' },
-              { value: 20, name: 'rose5' },
-              { value: 35, name: 'rose6' },
-              { value: 30, name: 'rose7' },
-              { value: 40, name: 'rose8' }
+              { value: 10, name: '开州区' },
+              { value: 5, name: '奉节县' },
+              { value: 15, name: '云阳县' },
+              { value: 25, name: '万州区' },
+              { value: 20, name: '巫溪县' },
+              { value: 35, name: '忠县' },
+              { value: 30, name: '城口县' },
+              { value: 40, name: '武隆区' }
             ]
           }
         ]
@@ -140,12 +161,14 @@ export default {
       const dom3 = document.getElementById('Chart3');
       const Chart3 = echarts.init(dom3); // 初始化echarts实例
       const option3 = {
-        // title: {
-        //   text: '基础雷达图'
-        // },
+        title: {
+          text: '设备占比',
+          left: 'center'
+        },
         tooltip: {},
         legend: {
-          data: ['预算分配', '实际开销']
+          top: 'bottom',
+          data: ['在线', '离线']
         },
         radar: {
           // shape: 'circle',
@@ -156,26 +179,26 @@ export default {
             padding: [3, 5]
           },
           indicator: [
-            { name: '销售', max: 6500 },
-            { name: '管理', max: 16000 },
-            { name: '信息技术', max: 30000 },
-            { name: '客服', max: 38000 },
-            { name: '研发', max: 52000 },
-            { name: '市场', max: 25000 }
+            { name: 'GNSS', max: 20 },
+            { name: '雨量计', max: 10 },
+            { name: '地裂缝', max: 10 },
+            { name: '墙裂缝', max: 10 },
+            { name: '倾斜仪', max: 10 },
+            { name: '应力计', max: 10 }
           ]
         },
         series: [{
-          name: '预算 vs 开销',
+          name: '在线 vs 离线',
           type: 'radar',
           // areaStyle: {normal: {}},
           data: [
             {
-              value: [4300, 10000, 28000, 35000, 50000, 19000],
-              name: '预算分配'
+              value: [14, 1, 2, 2, 5, 3],
+              name: '在线'
             },
             {
-              value: [5000, 14000, 28000, 31000, 42000, 21000],
-              name: '实际开销'
+              value: [15, 1, 3, 4, 5, 3],
+              name: '离线'
             }
           ]
         }]
@@ -210,7 +233,7 @@ export default {
       fullscreenButton: false, //是否显示全屏按钮
       geocoder: false, //是否显示geocoder小器件，右上角查询按钮
       homeButton: false, //是否显示Home按钮
-      infoBox: true, //是否显示信息框
+      infoBox: false , //是否显示信息框
       sceneModePicker: false, //是否显示3D/2D选择器
       selectionIndicator: false, //是否显示选取指示器组件
       timeline: false, //是否显示时间轴

@@ -1,7 +1,7 @@
 <template>
     <div class="common-layout">
         <el-container>
-            <el-header background-image="http://www.cqdky.com/images/cqdky/logo.png">
+            <el-header background-image ="http://www.cqdky.com/images/cqdky/logo.png">
                 <router-link to="/">大屏</router-link>
                 <router-link to="/home">首页</router-link>
                 <router-link to="/data">数据</router-link>
@@ -78,10 +78,10 @@ export default {
             animation: false, //是否创建动画小器件，左下角仪表
             baseLayerPicker: false, //是否显示图层选择器
             fullscreenButton: false, //是否显示全屏按钮
-            geocoder: false, //是否显示geocoder小器件，右上角查询按钮
-            homeButton: false, //是否显示Home按钮
+            geocoder: true, //是否显示geocoder小器件，右上角查询按钮
+            homeButton: true, //是否显示Home按钮
             infoBox: true, //是否显示信息框
-            sceneModePicker: false, //是否显示3D/2D选择器
+            sceneModePicker: true, //是否显示3D/2D选择器
             selectionIndicator: false, //是否显示选取指示器组件
             timeline: false, //是否显示时间轴
             navigationHelpButton: false, //是否显示右上角的帮助按钮
@@ -104,6 +104,23 @@ export default {
             dataSources: new Cesium.DataSourceCollection()
             //需要进行可视化的数据源的集合
         });
+        // Cesium.Camera.DEFAULT_VIEW_RECTANGLE =Cesium.Rectangle.fromDegrees(107.33, 29.85, 922000);//home
+
+
+        viewer.homeButton.viewModel.command.beforeExecute.addEventListener(function (e) {
+            e.cancel = true;
+            //你要飞的位置	
+            viewer.camera.flyTo({
+                destination: Cesium.Cartesian3.fromDegrees(107.33, 29.85, 922000),
+                orientation: {
+                heading: Cesium.Math.toRadians(348.4202942851978),
+                pitch: Cesium.Math.toRadians(-89.74026687972041),
+                roll: Cesium.Math.toRadians(0)
+            },
+            });
+        });
+
+
         viewer._cesiumWidget._creditContainer.style.display = "none"; //隐藏cesium的logo
 
         viewer._cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
@@ -153,11 +170,15 @@ export default {
         });
         viewer.imageryLayers.addImageryProvider(arcgisProvider);
 
-
+        // 地灾点矢量
+        var arcgisProvider = new Cesium.ArcGisMapServerImageryProvider({
+            url: "http://192.168.80.169:6080/arcgis/rest/services/地研院承担监测项目位置/MapServer",
+        });
+        viewer.imageryLayers.addImageryProvider(arcgisProvider);
 
         //定位到重庆
         viewer.camera.flyTo({
-            destination: Cesium.Cartesian3.fromDegrees(107.33, 29.85, 600000),
+            destination: Cesium.Cartesian3.fromDegrees(107.33, 29.85, 922000),
             orientation: {
                 heading: Cesium.Math.toRadians(348.4202942851978),
                 pitch: Cesium.Math.toRadians(-89.74026687972041),
@@ -238,11 +259,11 @@ export default {
 }
 
 .el-main {
-  background-color: 00E9EEF3;
-  color: #333;
-  text-align: center;
-  height: 850px;
-  padding: 0px;
+    background-color: 00E9EEF3;
+    color: #333;
+    text-align: center;
+    height: 850px;
+    padding: 0px;
 }
 
 // }

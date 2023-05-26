@@ -16,7 +16,11 @@
                 </template>
                 <el-sub-menu index="1-1">
                   <template #title>城口区</template>
-                  <el-menu-item index="1-1-1">立新滑坡</el-menu-item>
+                  <el-sub-menu index="1-1-1">
+                    <template #title>立新滑坡</template>
+                    <el-menu-item index="1-1-1-1">GNSS</el-menu-item>
+                    <el-menu-item index="1-1-1-2">降雨量</el-menu-item>
+                  </el-sub-menu>
                   <el-menu-item index="1-1-2">坪坝寺滑坡</el-menu-item>
                 </el-sub-menu>
                 <el-sub-menu index="1-2">
@@ -39,8 +43,8 @@
         </el-aside>
         <el-main>
           <div class="block" style="position:relative; top: 5px">
-            <el-date-picker v-model="date" type="datetimerange" range-separator="To"
-              start-placeholder="Start date" end-placeholder="End date" />
+            <el-date-picker v-model="date" type="datetimerange" :shortcuts="shortcuts" range-separator="To" start-placeholder="Start date"
+              end-placeholder="End date" />
           </div>
           <div ref="Chart" id="Chart" :style="{ width: '100%', height: '50%' }"></div>
         </el-main>
@@ -55,14 +59,44 @@ import { ref } from 'vue'
 
 
 export default {
-  data(){
-    return{
-      date: ref('')
+  data() {
+    return {
+      date: ref(''),
+      shortcuts: [
+        {
+          text: 'Last week',
+          value: () => {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+            return [start, end];
+          },
+        },
+        {
+          text: 'Last month',
+          value: () => {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+            return [start, end];
+          },
+        },
+        {
+          text: 'Last 3 months',
+          value: () => {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+            return [start, end];
+          },
+        },
+      ]
     }
   },
+  
   name: "echartsBox",
   setup() {
-    
+
     // 通过 internalInstance.appContext.config.globalProperties 获取全局属性或方法
     let internalInstance = getCurrentInstance();
     let echarts = internalInstance.appContext.config.globalProperties.$echarts;
@@ -133,7 +167,7 @@ export default {
         ],
         series: [
           {
-            name:'GNSS01',
+            name: 'GNSS01',
             id: 'a',
             type: 'line',
             smooth: true,
