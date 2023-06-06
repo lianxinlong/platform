@@ -1,20 +1,28 @@
 <template>
-  <div id="app"></div>
-  <router-view/>
+  <div id="app">
+    <router-view />
+  </div>
 </template>
 
 <script>
-import cesiumContainer from './components/cesiumContainer.vue'
+// import cesiumContainer from './components/cesiumContainer.vue'
 
+// export default {
+//   name: 'App',
+//   components: {
+//     cesiumContainer
+//   }
+// }
 export default {
-  name: 'App',
-  components: {
-    cesiumContainer
-  }
+
 }
 </script>
 
 <style>
+body {
+  margin: 0;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

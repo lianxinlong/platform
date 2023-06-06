@@ -1,0 +1,160 @@
+<template>
+    <dv-full-screen-container>
+        <div class="app-container">
+            
+            <div class="app-header">
+                <dv-decoration-8 style="width:660px;height:50px;" />
+                <dv-decoration-5 class="app-container-center" style="width:600px;height:40px;" />
+                <dv-decoration-8 reverse style="width:660px;height:50px;" />
+                <div class="title">地质灾害监测预警平台</div>
+            </div>
+            <!-- <div class="statistics"></div> -->
+            <!-- <div class="cesiumContainer" style="height:100%"></div> -->
+            
+            <div class="map" >
+                <!-- 遥感影像 -->
+                <cesiumContainer/>
+                <!-- 矢量 -->
+                
+                <!-- <dv-charts :option="optioncenter" /> -->
+            </div>
+            <!-- <div class="chart"></div> -->
+            <!-- 绝对定位 -->
+            <div class="lt fb">
+                <dv-border-box-1>
+                    <!-- <dv-digital-flop :config="configlt" style="width:100px;height:50px;" /> -->
+                    <dv-capsule-chart :config="configlt" style="left:10px;top:50px;width:480px;height:250px" />
+                    <!-- <dv-charts :option="optionlt" /> -->
+                </dv-border-box-1>
+            </div>
+            <div class="lb fb">
+                <dv-border-box-1>
+                    <!-- <dv-scroll-board :config="configlb" style="left:10px;top:10px;width:480px;height:280px;" /> -->
+                    <dv-charts :option="optionlb" />
+                </dv-border-box-1>
+            </div>
+            <div class="rt fb">
+                <dv-border-box-1>
+                    <!-- <dv-capsule-chart :config="configrt" style="left:10px;top:10px;width:480px;height:280px" /> -->
+                    <dv-charts :option="optionrt" />
+                </dv-border-box-1>
+            </div>
+            <div class="rb fb">
+                <dv-border-box-1>
+                    <!-- <dv-capsule-chart :config="configrt" style="left:10px;top:10px;width:480px;height:280px" /> -->
+                    <dv-charts :option="optionrb" />
+                </dv-border-box-1>
+            </div>
+        </div>
+
+    </dv-full-screen-container>
+</template>
+
+
+<script setup>
+import cesiumContainer from './cesiumContainer.vue'
+
+
+import configlt from './config/configlt.js';
+import configlb from './config/configlb.js';
+import configrt from './config/configrt.js';
+import configrb from './config/configrb.js';
+// import config5 from './config/config5.js';
+import optionlt from './config/optionlt.js';
+import optionlb from './config/optionlb.js';
+import optionrt from './config/optionrt.js';
+import optionrb from './config/optionrb.js';
+
+import optioncenter from './config/optioncenter.js';
+
+// export default {
+//   name: 'App',
+//   components: {
+//     cesiumContainer
+//   }
+// }
+
+
+</script>
+<style>
+body {
+    margin: 0;
+    /* padding: 0; */
+}
+
+/* 统一的padding */
+.app-container {
+    height: 100%;
+    width: 100%;
+    padding: 8px;
+    background-image: url(../assets/背景.png);
+    background-size: 100% 100%;
+}
+
+.app-header {
+    height: 100px;
+    display: flex;
+    justify-content: space-between;
+    position: relative
+}
+
+.app-container-center {
+    transform: translateY(30px);
+}
+
+.app-header .title {
+    color: white;
+    font-size: 30px;
+    font-weight: 700;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+
+
+}
+
+.statistics {
+    height: 100px;
+}
+
+.map {
+    height: 820px;
+}
+
+.chart {
+    height: 200px;
+}
+
+.fb {
+    width: 500px;
+    height: 300px;
+}
+
+.lt,
+.lb,
+.rt,
+.rb {
+    position: fixed;
+
+}
+
+.lt {
+    left: 0;
+    top: 100px;
+}
+
+.lb {
+    left: 0;
+    bottom: 150px;
+}
+
+.rt {
+    right: 0;
+    top: 100px;
+}
+
+.rb {
+    right: 0;
+    bottom: 150px;
+}
+</style>
