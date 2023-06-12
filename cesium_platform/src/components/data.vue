@@ -2,9 +2,11 @@
   <div class="common-layout">
     <el-container>
       <el-header>
-        <router-link to="/">大屏</router-link>
+        <!-- <router-link to="/">大屏</router-link>
         <router-link to="/home">首页</router-link>
-        <router-link to="/data">数据</router-link>
+        <router-link to="/data">数据</router-link> -->
+        <router-link class="dpbt" to="/" active-class="active">监测大屏</router-link>
+        <router-link class="homebt" to="/home" active-class="active">主页</router-link>
       </el-header>
       <el-container>
         <el-aside height='80%' width="18%">
@@ -43,8 +45,8 @@
         </el-aside>
         <el-main>
           <div class="block" style="position:relative; top: 5px">
-            <el-date-picker v-model="date" type="datetimerange" :shortcuts="shortcuts" range-separator="To" start-placeholder="Start date"
-              end-placeholder="End date" />
+            <el-date-picker v-model="date" type="datetimerange" :shortcuts="shortcuts" range-separator="To"
+              start-placeholder="Start date" end-placeholder="End date" />
           </div>
           <div ref="Chart" id="Chart" :style="{ width: '100%', height: '50%' }"></div>
         </el-main>
@@ -93,7 +95,7 @@ export default {
       ]
     }
   },
-  
+
   name: "echartsBox",
   setup() {
 
@@ -117,11 +119,39 @@ export default {
         toolbox: {
           show: true,
           feature: {
+            dataView: {
+              show: true,
+              readOnly: false,
 
-            dataView: { show: true, readOnly: false },
+              optionToContent: function (opt) {
+                // var axisData = opt.xAxis[0].data;
+                var series = opt.series;
+              
+
+
+                var table = '<table border="1" style="margin-left:20px;border-collapse:collapse;font-size:14px;text-align:center"><tbody><tr>'
+                  + '<td>时间</td>'
+                  + '<td>' + series[0].name + '</td>'
+                  // + '<td>' + series[1].name + '</td>'
+                  + '</tr>';
+                // for (var i = 0, l = axisData.length; i < l; i++) {
+                for (var i = 0, l = series[0].data.length; i < l; i++) {
+                  table += '<tr>'
+                    // + '<td>' + axisData[i] + '</td>'
+                    + '<td>' + series[0].data[i][0] + '</td>'
+                    + '<td>' + series[0].data[i][1] + '</td>'
+                    // + '<td>' + series[1].data[i] + '</td>'
+                    + '</tr>';
+                    // console.log(opt.series[0].data)
+                }
+                table += '</tbody></table>';
+                return table;
+              }
+            },
             restore: { show: true },
             saveAsImage: { show: true, type: 'png' }
           }
+
         },
         tooltip: {
           triggerOn: 'none',
@@ -241,6 +271,9 @@ export default {
         });
       }
 
+
+
+
       // 设置实例参数
       Chart.setOption(option);
     }
@@ -277,6 +310,24 @@ export default {
   text-align: center;
   height: 800px;
   padding: 0px;
+}
+
+.dpbt,
+.homebt {
+  color: white;
+  font-size: 30px;
+  text-align: center;
+  text-decoration: none;
+}
+
+.dpbt {
+  left: 80%;
+  position: absolute;
+}
+
+.homebt {
+  left: 88%;
+  position: absolute;
 }
 
 .block {

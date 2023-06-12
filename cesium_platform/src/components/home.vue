@@ -5,6 +5,8 @@
                 <!-- <router-link to="/">大屏</router-link>
                 <router-link to="/home">首页</router-link>
                 <router-link to="/data">数据</router-link> -->
+                <router-link class="dpbt" to="/" active-class="active">监测大屏</router-link>
+                <router-link class="databt" to="/data" active-class="active">数据</router-link>
             </el-header>
             <el-container>
 
@@ -476,5 +478,21 @@ header.el-header.header {
     background-color: burlywood;
 }
 
+.dpbt,
+.databt{
+    color: white;
+    font-size: 30px;
+    text-align: center;
+    text-decoration:none;
+    
+}
+.dpbt{
+    left: 80%;
+    position: absolute;
+}
+.databt{
+    left: 88%;
+    position: absolute;
+}
 // }
 </style>

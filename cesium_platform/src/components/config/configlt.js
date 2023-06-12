@@ -1,4 +1,5 @@
 export default {
+
   data: [
     {
       name: '一级监测点',
@@ -13,7 +14,7 @@ export default {
       value: 10541
     },
   ],
-  // colors: ['#e062ae',  '#32c5e9', '#96bfff'],
+  colors: ['#e062ae',  '#32c5e9', '#96bfff'],
   unit: '数量',
   showValue: true
 }
