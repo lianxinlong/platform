@@ -21,8 +21,8 @@ export default {
   },
   setup() {
     // 通过 internalInstance.appContext.config.globalProperties 获取全局属性或方法
-    let internalInstance = getCurrentInstance();
-    let echarts = internalInstance.appContext.config.globalProperties.$echarts;
+    // let internalInstance = getCurrentInstance();
+    // let echarts = internalInstance.appContext.config.globalProperties.$echarts;
 
     onMounted(() => {
     
@@ -123,7 +123,7 @@ export default {
 
       //定位到重庆
       viewer.camera.flyTo({
-        destination: Cesium.Cartesian3.fromDegrees(108.2521, 27.5565, 650000),
+        destination: Cesium.Cartesian3.fromDegrees(108.7521, 26.7565, 750000),
         orientation: {
           heading: Cesium.Math.toRadians(350.077213),
           pitch: Cesium.Math.toRadians(-66.4631042),

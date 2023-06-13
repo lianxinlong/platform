@@ -21,19 +21,24 @@
             <!-- <div class="statistics"></div> -->
             <!-- <div class="cesiumContainer" style="height:100%"></div> -->
 
-            <div class="map">
-                <!-- 遥感影像 -->
-                <!-- <cesiumContainer /> -->
+            <!-- <div class="map" style="position:relative;left:26%;width:48%;height:100%;"> -->
+            <!-- 遥感影像 -->
+            <!-- <cesiumContainer /> -->
+            <!-- </div> -->
+            <div class="map" id='map' ref='map'>
                 <!-- 矢量 -->
-                <dv-charts :option="optioncenter" />
+                <!-- <dv-charts :option="optioncenter" /> -->
                 <!-- 飞线图 -->
-                <!-- <dv-flyline-chart-enhanced :config="configcenter" style="position:relative;left:25%;width:50%;height:100%;" /> -->
+                <!-- <dv-flyline-chart-enhanced :config="configcenter" 
+                    style="position:relative;left:15%;width:70%;height:100%;" />  -->
+                <!-- :dev='true'  -->
             </div>
-            <!-- <div class="chart"></div> -->
-            <!-- 绝对定位 -->
+            <!-- <div class="chart"></div>  -->
+            <!-- 绝对定位  -->
             <div class="lt fb">
                 <dv-border-box-1>
-                    <div class="ltile" style="text-align: center;color: white;font-size: 20px;top: 20px;position: relative;">监测设备总数</div>
+                    <div class="ltile"
+                        style="text-align: center;color: white;font-size: 20px;top: 20px;position: relative;">监测设备总数</div>
                     <!-- <dv-digital-flop :config="configlt" style="width:100px;height:50px;" /> -->
                     <dv-capsule-chart :config="configlt" style="left:10px;top:50px;width:480px;height:230px" />
                     <!-- <dv-charts :option="optionlt" /> -->
@@ -63,7 +68,8 @@
 </template>
 
 
-<script setup>
+<!-- <script setup>
+import * as echarts from 'echarts';
 
 import cesiumContainer from './cesiumContainer.vue'
 
@@ -80,16 +86,145 @@ import optionrb from './config/optionrb.js';
 
 import optioncenter from './config/optioncenter.js';
 
-
-// export default {
-//   name: 'App',
-//   components: {
-//     cesiumContainer
-//   }
-// }
+</script> -->
 
 
+<script>
+import { defineComponent, ref, onMounted } from 'vue';
+import * as echarts from 'echarts';
+import cesiumContainer from './cesiumContainer.vue';
+import configlt from './config/configlt.js';
+import configlb from './config/configlb.js';
+import configrt from './config/configrt.js';
+import configrb from './config/configrb.js';
+import configcenter from './config/configcenter.js';
+import optionlt from './config/optionlt.js';
+import optionlb from './config/optionlb.js';
+import optionrt from './config/optionrt.js';
+import optionrb from './config/optionrb.js';
+import optioncenter from './config/optioncenter.js';
+import chongqingshiJson from '../assets/chongqingshi.json';
+// import dvCharts from 'dv-charts'
+
+// echarts.registerMap('chongqingshi', chongqingshiJson);
+
+export default defineComponent({
+    components: {},
+    setup() {
+        const isChartReady = ref(false);
+        // const chartData = ref({});
+
+        const map = ref(null);
+        onMounted(() => {
+
+            // 初始化 ECharts
+            echarts.registerMap('chongqingshi', chongqingshiJson);
+
+            // 获取 DOM 元素
+            setTimeout(() => {
+                const mapchart = echarts.init(map.value);
+                mapchart.setOption({
+                    // title: {
+                    //     text: '重庆地图',
+
+                    // },
+                    tooltip: {
+                        trigger: 'item',
+                        // formatter: '{b}<br/>{c} (p / km2)'
+                    },
+                    // toolbox: {
+                    //     show: true,
+                    //     orient: 'vertical',
+                    //     left: 'right',
+                    //     top: 'center',
+                    //     feature: {
+                    //         dataView: { readOnly: false },
+                    //         restore: {},
+                    //         saveAsImage: {}
+                    //     }
+                    // },
+                    // visualMap: {
+                    //     min: 800,
+                    //     max: 50000,
+                    //     text: ['High', 'Low'],
+                    //     realtime: false,
+                    //     calculable: true,
+                    //     inRange: {
+                    //         color: ['lightskyblue', 'yellow', 'orangered']
+                    //     }
+                    // },
+                    series: [
+                        {
+                            name: '重庆市',
+                            type: 'map',
+                            map: 'chongqingshi',
+                            roam: 'true',
+                            aspectScale: 1,
+                            zoom: 1.2,
+                            itemStyle: {
+                                color:'rgba(255,255,0,0.5)',
+                                // 设置边框的颜色和宽度
+                                borderColor: '#fff',
+                                borderWidth: 1,
+                                opacity:1,
+                                // 设置地图的透明度
+                                areaStyle: {
+                                    // opacity: 0.5,
+                                    color: 'rgba(255,255,255,0.5)', // 设置地图的填充颜色透明
+                                },
+                            },
+                        }
+                    ],
+                });
+                isChartReady.value = true;
+            }, 0);
+        });
+
+        return {
+            map,
+            isChartReady,
+            // chartData,
+        };
+    },
+    data() {
+        return {
+            configlt,
+            // optioncenter, // 这里定义optioncenter变量并赋初值
+            optionlb,
+            optionrb,
+            optionrt,
+            isChartReady: false,
+        };
+    },
+    created() { },
+    // mounted() {
+    //     echarts.registerMap('chongqingshi', chongqingshiJson)
+    //     // console.log(chongqingshiJson)
+    //     // let mapchart = echarts.init(this.$refs.chart);
+    //     setTimeout(() => {
+    //         const chart = echarts.init(this.$refs.chart);
+    //         chart.setOption({
+    //             series: [
+    //                 {
+    //                     name: '重庆市',
+    //                     type: 'map',
+    //                     mapType: 'chongqingshi',
+    //                 }
+    //             ]
+    //         });
+    //         this.isChartReady = true;
+    //     }, 0);
+
+    // },
+
+    methods: {
+
+    },
+});
 </script>
+
+
+
 <style>
 body {
     margin: 0;
@@ -127,7 +262,7 @@ body {
 
 .app-header .home {
     width: 100px;
-    height: 50px;
+    height: 45px;
     position: absolute;
     top: 50%;
     left: 70%;
@@ -137,7 +272,7 @@ body {
 
 .app-header .data {
     width: 100px;
-    height: 50px;
+    height: 45px;
     position: absolute;
     top: 50%;
     left: 76%;
@@ -204,4 +339,5 @@ body {
     bottom: 150px;
     /* background-image: linear-gradient(to left, #080808,#fcfcfc);
     opacity:0.5;   */
-}</style>
+}
+</style>

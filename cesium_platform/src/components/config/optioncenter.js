@@ -1,17 +1,45 @@
-import $ from 'jquery'
-import Charts from '@jiaminghi/charts'
+// import $ from 'jquery'
+// import Charts from '@jiaminghi/charts'
+// import * as echarts from 'echarts';
+// import { onMounted } from 'vue';
+// import chongqingshiJson from '../../assets/chongqingshi.json'
+// // myChart.showLoading();
+// // const container =document.getElementById('map')
+
+// // const myChart = new Charts(container)
+
+// echarts.registerMap('chongqingshi', chongqingshiJson);
+// const optioncenter={
+//     title: {
+//         text: '这里放可交互重庆地图',
+//         style: {
+//             fill: 'rgba(255, 255, 255, 1)'
+//         }
+//     },
+
+//     series: [
+//         {
+//             name: 'chongqingshi',
+//             type: 'map',
+//             mapType: 'chongqingshi',
+//         }
+//     ]
+    
+// }
+
+// export default optioncenter
+
+
 import * as echarts from 'echarts';
-import { onMounted } from 'vue';
-import chongqingshiJson from '../../assets/chongqingshi.json'
-// myChart.showLoading();
-// const container =document.getElementById('map')
+// import 'echarts/map/js/china';
+// import optioncenter from './config/optioncenter';
+import chongqingshiJson from '../../assets/chongqingshi.json';
 
-// const myChart = new Charts(container)
-
+// 注册地图数据
 echarts.registerMap('chongqingshi', chongqingshiJson);
 const optioncenter={
     title: {
-        text: '这里放重庆地图',
+        text: '这里放可交互重庆地图',
         style: {
             fill: 'rgba(255, 255, 255, 1)'
         }
@@ -21,12 +49,9 @@ const optioncenter={
         {
             name: 'chongqingshi',
             type: 'map',
-            map: 'chongqingshi',
+            mapType: 'chongqingshi',
         }
     ]
     
 }
-console.log(optioncenter)
-console.log(optioncenter.series)
-console.log(optioncenter.series.map)
 export default optioncenter

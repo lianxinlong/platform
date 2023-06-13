@@ -2,7 +2,7 @@ export default {
     points: [
       {
         name: '渝北区',
-        coordinate: [0.48, 0.35],
+        coordinate: [0.30, 0.59],
         halo: {
           show: true,
         },
@@ -12,44 +12,52 @@ export default {
           height: 30
         },
         text: {
-          show: false
+          show: true
         }
       },
       {
         name: '开州区',
-        coordinate: [0.52, 0.23]
+        coordinate: [0.56, 0.24]
       },
       {
         name: '奉节县',
-        coordinate: [0.43, 0.29]
+        coordinate: [0.70, 0.32]
       },
       {
         name: '云阳县',
-        coordinate: [0.59, 0.35]
+        coordinate: [0.62, 0.31]
       },
       {
         name: '武隆区',
-        coordinate: [0.53, 0.47]
+        coordinate: [0.45, 0.67]
       },
       {
         name: '涪陵区',
-        coordinate: [0.45, 0.54]
+        coordinate: [0.40, 0.60]
       },
       {
         name: '丰都县',
-        coordinate: [0.36, 0.38]
+        coordinate: [0.47, 0.57]
       },
       {
         name: '忠县',
-        coordinate: [0.62, 0.55]
+        coordinate: [0.49, 0.45]
       },
       {
         name: '长寿区',
-        coordinate: [0.56, 0.56]
+        coordinate: [0.38, 0.53]
       },
       {
         name: '黔江区',
-        coordinate: [0.37, 0.66]
+        coordinate: [0.59, 0.68]
+      },
+      {
+        name: '巫溪县',
+        coordinate: [0.69, 0.20]
+      },
+      {
+        name: '城口县',
+        coordinate: [0.61, 0.11]
       },
     ],
     lines: [
@@ -88,6 +96,14 @@ export default {
       {
         source: '黔江区',
         target: '渝北区'
+      },
+      {
+        source: '城口县',
+        target: '渝北区'
+      },
+      {
+        source: '巫溪县',
+        target: '渝北区'
       }
     ],
     icon: {
@@ -97,5 +113,5 @@ export default {
     text: {
       show: true,
     },
-    bgImgSrc: require('../../assets/chongqingshi1.png' )
+    bgImgSrc: require('../../assets/chongqingshi.png' )
   }
