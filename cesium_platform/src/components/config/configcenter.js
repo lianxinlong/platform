@@ -12,7 +12,7 @@ export default {
           height: 30
         },
         text: {
-          show: true
+          show: false
         }
       },
       {
@@ -111,7 +111,7 @@ export default {
     //   src: '/img/flylineChart/mapPoint.png'
     },
     text: {
-      show: true,
+      show: false,
     },
-    bgImgSrc: require('../../assets/chongqingshi.png' )
+    // bgImgSrc: require('../../assets/chongqingshi.png' )
   }

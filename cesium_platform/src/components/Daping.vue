@@ -25,7 +25,13 @@
             <!-- 遥感影像 -->
             <!-- <cesiumContainer /> -->
             <!-- </div> -->
-            <div class="map" id='map' ref='map'>
+
+            <dv-flyline-chart-enhanced :config="configcenter" :dev="true"
+                style="position:absolute;width:100%;height:100%;" />
+
+
+            <!-- <div class="map" ref='map' style="z-index: 999;"> -->
+            <div class="map" ref='map'>
                 <!-- 矢量 -->
                 <!-- <dv-charts :option="optioncenter" /> -->
                 <!-- 飞线图 -->
@@ -128,10 +134,10 @@ export default defineComponent({
                     //     text: '重庆地图',
 
                     // },
-                    tooltip: {
-                        trigger: 'item',
-                        // formatter: '{b}<br/>{c} (p / km2)'
-                    },
+                    // tooltip: {
+                    //     trigger: 'item',
+                    //     // formatter: '{b}<br/>{c} (p / km2)'
+                    // },
                     // toolbox: {
                     //     show: true,
                     //     orient: 'vertical',
@@ -159,20 +165,37 @@ export default defineComponent({
                             type: 'map',
                             map: 'chongqingshi',
                             roam: 'true',
-                            aspectScale: 1,
+                            aspectScale: 0.9,
                             zoom: 1.2,
+                            // label: {
+                            //     show: true,
+                            //     color:'rgba(255,255,255,1)'
+                            // },
                             itemStyle: {
-                                color:'rgba(255,255,0,0.5)',
+                                areaColor: 'rgba(255,255,255,0.1)',
+
                                 // 设置边框的颜色和宽度
-                                borderColor: '#fff',
-                                borderWidth: 1,
-                                opacity:1,
-                                // 设置地图的透明度
-                                areaStyle: {
-                                    // opacity: 0.5,
-                                    color: 'rgba(255,255,255,0.5)', // 设置地图的填充颜色透明
+                                // borderColor: 'rgba(255,255,255,1)',
+                                borderColor: 'rgba(255,255,255,1)',
+                                borderWidth: 2,
+                                //阴影
+                                shadowBlur: {
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)',
+                                    shadowBlur: 10
                                 },
+                                // opacity:0.5, 
+
                             },
+                            emphasis: {
+                                label: {
+                                    color: 'rgba(0,0,0,1)',
+                                    fontSize: 15,
+                                },
+                                itemStyle: {
+                                    areaColor: 'rgba(255,255,255,1)',
+
+                                }
+                            }
                         }
                     ],
                 });
@@ -193,6 +216,7 @@ export default defineComponent({
             optionlb,
             optionrb,
             optionrt,
+            configcenter,
             isChartReady: false,
         };
     },
