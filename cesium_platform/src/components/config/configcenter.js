@@ -2,7 +2,7 @@ export default {
     points: [
       {
         name: '渝北区',
-        coordinate: [0.30, 0.59],
+        coordinate: [0.39, 0.47],
         halo: {
           show: true,
         },
@@ -17,47 +17,51 @@ export default {
       },
       {
         name: '开州区',
-        coordinate: [0.56, 0.24]
+        coordinate: [0.56, 0.17]
       },
       {
         name: '奉节县',
-        coordinate: [0.70, 0.32]
+        coordinate: [0.65, 0.24]
       },
       {
         name: '云阳县',
-        coordinate: [0.62, 0.31]
+        coordinate: [0.60, 0.22]
       },
       {
         name: '武隆区',
-        coordinate: [0.45, 0.67]
+        coordinate: [0.50, 0.52]
       },
       {
         name: '涪陵区',
-        coordinate: [0.40, 0.60]
+        coordinate: [0.46, 0.47]
       },
       {
         name: '丰都县',
-        coordinate: [0.47, 0.57]
+        coordinate: [0.51, 0.43]
       },
       {
         name: '忠县',
-        coordinate: [0.49, 0.45]
+        coordinate: [0.52, 0.35]
       },
       {
         name: '长寿区',
-        coordinate: [0.38, 0.53]
+        coordinate: [0.44, 0.42]
       },
       {
         name: '黔江区',
-        coordinate: [0.59, 0.68]
+        coordinate: [0.59, 0.51]
       },
       {
         name: '巫溪县',
-        coordinate: [0.69, 0.20]
+        coordinate: [0.64, 0.13]
       },
       {
         name: '城口县',
-        coordinate: [0.61, 0.11]
+        coordinate: [0.58, 0.07]
+      },
+      {
+        name: '巫山县',
+        coordinate: [0.70, 0.20]
       },
     ],
     lines: [
@@ -103,6 +107,10 @@ export default {
       },
       {
         source: '巫溪县',
+        target: '渝北区'
+      },
+      {
+        source: '巫山县',
         target: '渝北区'
       }
     ],

@@ -6,7 +6,11 @@
                 <dv-decoration-8 style="width:660px;height:50px;" />
                 <dv-decoration-5 class="app-container-center" style="width:600px;height:40px;" />
                 <dv-decoration-8 reverse style="width:660px;height:50px;" />
-                <div class="title">地质灾害监测预警平台</div>
+               
+                <div class="title">
+                    <img src='../assets/logo.png' alt="图标">
+                    <span>地质灾害监测预警平台</span>
+                </div>
                 <div class="home">
                     <dv-border-box-8> <router-link class="homebt" to="/home"
                             active-class="active">首页</router-link></dv-border-box-8>
@@ -30,8 +34,8 @@
                 style="position:absolute;width:100%;height:100%;" />
 
 
-            <!-- <div class="map" ref='map' style="z-index: 999;"> -->
-            <div class="map" ref='map'>
+            <div class="map" ref='map' style="z-index: 999;">
+                <!-- <div class="map" ref='map'> -->
                 <!-- 矢量 -->
                 <!-- <dv-charts :option="optioncenter" /> -->
                 <!-- 飞线图 -->
@@ -43,11 +47,11 @@
             <!-- 绝对定位  -->
             <div class="lt fb">
                 <dv-border-box-1>
-                    <div class="ltile"
-                        style="text-align: center;color: white;font-size: 20px;top: 20px;position: relative;">监测设备总数</div>
+                    <!-- <div class="ltile"
+                        style="text-align: center;color: white;font-size: 20px;top: 20px;position: relative;">监测设备总数</div> -->
                     <!-- <dv-digital-flop :config="configlt" style="width:100px;height:50px;" /> -->
-                    <dv-capsule-chart :config="configlt" style="left:10px;top:50px;width:480px;height:230px" />
-                    <!-- <dv-charts :option="optionlt" /> -->
+                    <!-- <dv-capsule-chart :config="configlt" style="left:10px;top:50px;width:480px;height:230px" /> -->
+                    <dv-charts :option="optionlt" style="left:10px;width: 480px;height: 380px;"/>
                 </dv-border-box-1>
             </div>
             <div class="lb fb">
@@ -179,21 +183,24 @@ export default defineComponent({
                                 borderColor: 'rgba(255,255,255,1)',
                                 borderWidth: 2,
                                 //阴影
-                                shadowBlur: {
-                                    shadowColor: 'rgba(0, 0, 0, 0.5)',
-                                    shadowBlur: 10
+                                shadowStyle: {
+                                    shadowColor: 'rgba(255, 255, 255, 0.5)',
+                                    shadowBlur: 100
                                 },
                                 // opacity:0.5, 
 
                             },
+                            // shadowStyle: {
+                            //     shadowColor: 'rgba(255, 255, 255, 0.5)',
+                            //     shadowBlur: 100
+                            // },
                             emphasis: {
                                 label: {
-                                    color: 'rgba(0,0,0,1)',
+                                    color: 'rgba(255,255,255,1)',
                                     fontSize: 15,
                                 },
                                 itemStyle: {
-                                    areaColor: 'rgba(255,255,255,1)',
-
+                                    areaColor: 'rgba(255,255,255,0.1)',
                                 }
                             }
                         }
@@ -212,6 +219,7 @@ export default defineComponent({
     data() {
         return {
             configlt,
+            optionlt,
             // optioncenter, // 这里定义optioncenter变量并赋初值
             optionlb,
             optionrb,
@@ -275,6 +283,9 @@ body {
     transform: translateY(30px);
 }
 
+
+
+
 .app-header .title {
     color: white;
     font-size: 30px;
@@ -282,7 +293,17 @@ body {
     position: absolute;
     left: 50%;
     transform: translate(-50%);
+
+    display: inline-flex; /* 让图片和文字在同一行，不换行 */
+    align-items: center; /* 垂直居中文字和图片 */
 }
+
+.app-header .title img{
+    margin-right: 8px; /* 图片和文字之间的间距 */
+    width: 45px; /* 图片宽度 */
+    height: 45px; /* 图片高度 */
+}
+
 
 .app-header .home {
     width: 100px;
