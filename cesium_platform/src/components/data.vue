@@ -1,16 +1,24 @@
 <template>
-  <div class="common-layout">
+  <div class="common-layout" type="flex">
     <el-container>
-      <el-header>
+      <el-header class="home-header">
+        <div class="title">
+          <img src='../assets/logo.png' alt="图标">
+          <span>地质灾害监测预警平台</span>
+        </div>
         <!-- <router-link to="/">大屏</router-link>
-        <router-link to="/home">首页</router-link>
-        <router-link to="/data">数据</router-link> -->
+                <router-link to="/home">首页</router-link>
+                <router-link to="/data">数据</router-link> -->
         <router-link class="dpbt" to="/" active-class="active">监测大屏</router-link>
         <router-link class="homebt" to="/home" active-class="active">主页</router-link>
+        <router-link class="databt" to="/data" active-class="active">数据</router-link>
       </el-header>
       <el-container>
-        <el-aside height='80%' width="18%">
-          <el-row class="tac" width="100%">
+        <el-aside>
+          <div class="menu">
+            <dizaiMenu />
+          </div>
+          <!-- <el-row class="tac">
             <el-menu class="el-menu-vertical-demo" width="100%" opacity="1" default-active="2">
               <el-sub-menu index="1">
                 <template #title>
@@ -41,32 +49,37 @@
                 <span>2021年地质灾害专业监测预警</span>
               </el-menu-item>
             </el-menu>
-          </el-row>
+          </el-row> -->
         </el-aside>
         <el-main>
-          <div class="block" style="position:relative; top: 5px">
+          <div class="block">
             <el-date-picker v-model="date" type="datetimerange" :shortcuts="shortcuts" range-separator="To"
-              start-placeholder="Start date" end-placeholder="End date" />
+              start-placeholder="开始日期" end-placeholder="结束时间" />
           </div>
-          <div ref="Chart" id="Chart" :style="{ width: '100%', height: '50%' }"></div>
+          <div ref="Chart" id="Chart" class=" Chart" :style="{ width: '100%', height: '100%' }"></div>
         </el-main>
       </el-container>
-      <el-footer>地质分院安全监测所</el-footer>
+      <!-- <el-footer>地质分院安全监测所</el-footer> -->
     </el-container>
   </div>
 </template>
 <script>
 import { getCurrentInstance, onMounted } from 'vue';
+import dizaiMenu from './Menu.vue';
 import { ref } from 'vue'
 
 
 export default {
+  name: "echartsBox",
+  components: {
+    dizaiMenu
+  },
   data() {
     return {
       date: ref(''),
       shortcuts: [
         {
-          text: 'Last week',
+          text: '最近一周',
           value: () => {
             const end = new Date();
             const start = new Date();
@@ -75,7 +88,7 @@ export default {
           },
         },
         {
-          text: 'Last month',
+          text: '最近一月',
           value: () => {
             const end = new Date();
             const start = new Date();
@@ -84,7 +97,7 @@ export default {
           },
         },
         {
-          text: 'Last 3 months',
+          text: '最近三月',
           value: () => {
             const end = new Date();
             const start = new Date();
@@ -96,7 +109,7 @@ export default {
     }
   },
 
-  name: "echartsBox",
+
   setup() {
 
     // 通过 internalInstance.appContext.config.globalProperties 获取全局属性或方法
@@ -126,9 +139,6 @@ export default {
               optionToContent: function (opt) {
                 // var axisData = opt.xAxis[0].data;
                 var series = opt.series;
-              
-
-
                 var table = '<table border="1" style="margin-left:20px;border-collapse:collapse;font-size:14px;text-align:center"><tbody><tr>'
                   + '<td>时间</td>'
                   + '<td>' + series[0].name + '</td>'
@@ -142,7 +152,7 @@ export default {
                     + '<td>' + series[0].data[i][1] + '</td>'
                     // + '<td>' + series[1].data[i] + '</td>'
                     + '</tr>';
-                    // console.log(opt.series[0].data)
+                  // console.log(opt.series[0].data)
                 }
                 table += '</tbody></table>';
                 return table;
@@ -283,10 +293,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-container {
-  padding: 0px;
-  margin: 0px;
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.common-layout {
   height: 100%;
+  width: 100%;
+}
+
+.el-container {
+  padding: 0;
+  margin: 0;
+  height: 96%;
 }
 
 .el-header,
@@ -294,45 +314,90 @@ export default {
   background-color: #B3C0D1;
   color: #333;
   text-align: center;
-  line-height: 60px;
+  height: 8%;
+  display: inline-flex;
+  align-items: center;
+  padding: 0vw;
+  // box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
 }
 
 .el-aside {
-  background-color: #D3DCE6;
+  // background-color: #D3DCE6;
   color: #333;
   text-align: center;
-  line-height: 800px;
+  height: 100%;
+  width: 15%;
+  // line-height: 800px;
+}
+
+.el-menu {
+  width: 100%;
 }
 
 .el-main {
   background-color: 00E9EEF3;
   color: #333;
   text-align: center;
-  height: 800px;
-  padding: 0px;
+  height: 100%;
+  width: 85%;
+  padding: 0;
 }
 
-.dpbt,
-.homebt {
+.home-header .title {
+
   color: white;
-  font-size: 30px;
+  font-size: 1.5vw;
+  font-weight: bolder;
+  // margin: auto;
+  // position: absolute;
+  // transform: translate(-50%);
+  display: inline-flex;
+  align-items: center;
+}
+
+.home-header .title img {
+  margin-left: 1vw;
+  margin-right: 1vw;
+  width: 4vw;
+  height: 3vw;
+}
+
+
+.dpbt,
+.homebt,
+.databt {
+  color: white;
+  font-size: 1.2vw;
   text-align: center;
   text-decoration: none;
 }
 
 .dpbt {
-  left: 80%;
+  left: 75%;
   position: absolute;
 }
 
 .homebt {
-  left: 88%;
+  left: 81%;
+  position: absolute;
+}
+
+.databt {
+  left: 85%;
   position: absolute;
 }
 
 .block {
+  position: fixed;
+  top: 4vw;
   text-align: left;
-  left: 10px;
+  right: 10vw;
+  z-index: 999;
+}
+
+.Chart {
+  height: 42vw;
+  width: 78vw;
 }
 </style>
 

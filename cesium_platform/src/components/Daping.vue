@@ -229,25 +229,6 @@ export default defineComponent({
         };
     },
     created() { },
-    // mounted() {
-    //     echarts.registerMap('chongqingshi', chongqingshiJson)
-    //     // console.log(chongqingshiJson)
-    //     // let mapchart = echarts.init(this.$refs.chart);
-    //     setTimeout(() => {
-    //         const chart = echarts.init(this.$refs.chart);
-    //         chart.setOption({
-    //             series: [
-    //                 {
-    //                     name: '重庆市',
-    //                     type: 'map',
-    //                     mapType: 'chongqingshi',
-    //                 }
-    //             ]
-    //         });
-    //         this.isChartReady = true;
-    //     }, 0);
-
-    // },
 
     methods: {
 
@@ -282,8 +263,6 @@ body {
 .app-container-center {
     transform: translateY(30px);
 }
-
-
 
 
 .app-header .title {
