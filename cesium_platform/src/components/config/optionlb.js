@@ -32,6 +32,8 @@ export default {
   },
   yAxis: {
     name: '设备在线率(%)',
+    min:0,
+    max:100,
     //标题颜色
     nameTextStyle: {
       fill: "rgba(255, 255, 255, 1)"
@@ -55,7 +57,7 @@ export default {
   },
   series: [
     {
-      data: [95.78, 93.55, 92.01, 92, 83.78, 84.48, 93.01, 93.78],
+      data: [99.78, 98.55, 97.01, 98.21, 93.78, 94.48, 93.01, 93.78],
       type: 'bar',
       gradient: {
         color: ['#37a2da', '#67e0e3']

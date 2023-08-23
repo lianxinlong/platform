@@ -27,7 +27,7 @@ export default {
             data: [
                 { name: '一级监测点', value: 100, radius: '20%'},
                 { name: '二级监测点', value: 98, radius: '40%' },
-                { name: '三级监测点', value: 92,  },
+                { name: '三级监测点', value: 99,  },
             ],
             
             axisLabel: {

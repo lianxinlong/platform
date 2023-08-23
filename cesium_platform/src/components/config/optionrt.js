@@ -10,6 +10,7 @@ export default {
   series: [
     {
       type: 'pie',
+      radius:'60%',
       data: [
         { name: '长寿区', value: 93 },
         { name: '忠县', value: 32 },

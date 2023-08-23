@@ -15,6 +15,11 @@ module.exports = defineConfig({
         return args
       })
   },
+  // resolve: {
+  //   alias: {
+  //     '@': path.resolve(__dirname, 'src')
+  //   }
+  // }
   // 配置jquery
   // configureWebpack: {
   //   plugins: [

@@ -9,9 +9,14 @@
         <!-- <router-link to="/">大屏</router-link>
                 <router-link to="/home">首页</router-link>
                 <router-link to="/data">数据</router-link> -->
-        <router-link class="dpbt" to="/" active-class="active">监测大屏</router-link>
-        <router-link class="homebt" to="/home" active-class="active">主页</router-link>
-        <router-link class="databt" to="/data" active-class="active">数据</router-link>
+        <div class="guide">
+          <router-link class="dpbt" to="/" active-class="active">监测大屏</router-link>
+          <router-link class="GZbt" to="/GZ" active-class="active">规资</router-link>
+          <router-link class="YJbt" to="/YJ" active-class="active">应急</router-link>
+          <router-link class="JTbt" to="/JT" active-class="active">交通</router-link>
+          <router-link class="SLbt" to="/SL" active-class="active">水利</router-link>
+          <router-link class="databt" to="/data" active-class="active">数据</router-link>
+        </div>
       </el-header>
       <el-container>
         <el-aside>
@@ -109,7 +114,12 @@ export default {
     }
   },
 
+  computed: {
+    key() {
+      return this.$route.path + Math.random();
+    }
 
+  },
   setup() {
 
     // 通过 internalInstance.appContext.config.globalProperties 获取全局属性或方法
@@ -372,19 +382,55 @@ export default {
   text-decoration: none;
 }
 
-.dpbt {
-  left: 75%;
-  position: absolute;
-}
+// .guide{
+//     justify-content: flex-end;
+// }
 
-.homebt {
-  left: 81%;
-  position: absolute;
-}
-
+.dpbt,
+.GZbt,
+.YJbt,
+.JTbt,
+.SLbt,
 .databt {
-  left: 85%;
-  position: absolute;
+    padding: 0.5vw;
+    color: white;
+    font-size: 1.2vw;
+    text-align: center;
+    text-decoration: none;
+    
+    // justify-content: flex-end;
+}
+
+.databt{
+  color: black;
+}
+.dpbt {
+    // left: 75%;
+    // position: absolute;
+    padding-left: 50vw;
+    // justify-content: flex-end;
+
+}
+
+
+.GZbt {
+    // left: 81%;
+    // position: absolute;
+}
+
+
+.YJbt {
+    // left: 81%;
+    // position: absolute;
+}
+.JTbt {
+    // left: 81%;
+    // position: absolute;
+}
+
+.SLbt {
+    // left: 85%;
+    // position: absolute;
 }
 
 .block {

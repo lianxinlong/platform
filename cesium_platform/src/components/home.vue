@@ -84,12 +84,27 @@
 // import { onMounted } from 'vue';
 import cesiumContainer from './cesiumContainer.vue';
 import dizaiMenu from './Menu.vue';
+// import flyTo from './flyTo.vue';
+// import addLayer from './addLayer.vue';
+// import popUp from './popUp.vue';
 // import Popup from "./Popup.vue";
 // import $ from 'jquery';
 export default {
     components: {
         cesiumContainer,
-        dizaiMenu
+        dizaiMenu,
+        // flyTo
+    },
+    data() {
+        return {
+        }
+    },
+    methods: {
+        flyTo(){
+
+        }
+        // anotherMethod() {
+        // console.log(this.viewer)}
     },
 }
 // export default {

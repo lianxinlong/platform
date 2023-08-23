@@ -3,17 +3,34 @@
         <div class="app-container">
 
             <div class="app-header">
-                <dv-decoration-8 style="width:660px;height:50px;" />
-                <dv-decoration-5 class="app-container-center" style="width:600px;height:40px;" />
-                <dv-decoration-8 reverse style="width:660px;height:50px;" />
-               
+                <dv-decoration-8 style="width:660px;height:80px;" />
+                <dv-decoration-5 class="app-container-center" style="width:600px;height:100px;" />
+                <dv-decoration-8 reverse style="width:660px;height:80px;" />
+                <div class="pretitle">
+                    <span>重庆地质矿产研究院</span>
+                </div>
                 <div class="title">
                     <img src='../assets/logo.png' alt="图标">
                     <span>地质灾害监测预警平台</span>
                 </div>
-                <div class="home">
-                    <dv-border-box-8> <router-link class="homebt" to="/home"
-                            active-class="active">首页</router-link></dv-border-box-8>
+                <div class="GZ">
+                    <dv-border-box-8> <router-link class="GZbt" to="/GZ"
+                            active-class="active">规资</router-link></dv-border-box-8>
+
+                </div>
+                <div class="YJ">
+                    <dv-border-box-8> <router-link class="YJbt" to="/YJ"
+                            active-class="active">应急</router-link></dv-border-box-8>
+
+                </div>
+                <div class="JT">
+                    <dv-border-box-8> <router-link class="JTbt" to="/JT"
+                            active-class="active">交通</router-link></dv-border-box-8>
+
+                </div>
+                <div class="SL">
+                    <dv-border-box-8> <router-link class="SLbt" to="/SL"
+                            active-class="active">水利</router-link></dv-border-box-8>
 
                 </div>
                 <div class="data">
@@ -51,7 +68,7 @@
                         style="text-align: center;color: white;font-size: 20px;top: 20px;position: relative;">监测设备总数</div> -->
                     <!-- <dv-digital-flop :config="configlt" style="width:100px;height:50px;" /> -->
                     <!-- <dv-capsule-chart :config="configlt" style="left:10px;top:50px;width:480px;height:230px" /> -->
-                    <dv-charts :option="optionlt" style="left:10px;width: 480px;height: 380px;"/>
+                    <dv-charts :option="optionlt" style="left:10px;width: 480px;height: 380px;" />
                 </dv-border-box-1>
             </div>
             <div class="lb fb">
@@ -102,17 +119,17 @@ import optioncenter from './config/optioncenter.js';
 <script>
 import { defineComponent, ref, onMounted } from 'vue';
 import * as echarts from 'echarts';
-import cesiumContainer from './cesiumContainer.vue';
+// import cesiumContainer from './cesiumContainer.vue';
 import configlt from './config/configlt.js';
-import configlb from './config/configlb.js';
-import configrt from './config/configrt.js';
-import configrb from './config/configrb.js';
+// import configlb from './config/configlb.js';
+// import configrt from './config/configrt.js';
+// import configrb from './config/configrb.js';
 import configcenter from './config/configcenter.js';
 import optionlt from './config/optionlt.js';
 import optionlb from './config/optionlb.js';
 import optionrt from './config/optionrt.js';
 import optionrb from './config/optionrb.js';
-import optioncenter from './config/optioncenter.js';
+// import optioncenter from './config/optioncenter.js';
 import chongqingshiJson from '../assets/chongqingshi.json';
 // import dvCharts from 'dv-charts'
 
@@ -225,10 +242,15 @@ export default defineComponent({
             optionrb,
             optionrt,
             configcenter,
-            isChartReady: false,
+            // isChartReady: false,
         };
     },
-    created() { },
+    computed: {
+        key() {
+            return this.$route.path + Math.random();
+        }
+
+    },
 
     methods: {
 
@@ -265,45 +287,99 @@ body {
 }
 
 
+.app-header .pretitle{
+    color: white;
+    font-size: 28px;
+    font-weight: 700;
+    position: absolute;
+    left: -3%;
+    transform: translate(50%);
+
+    display: inline-flex;
+    /* 让图片和文字在同一行，不换行 */
+    align-items: center;
+}
+
+
 .app-header .title {
     color: white;
-    font-size: 30px;
+    font-size: 36px;
     font-weight: 700;
     position: absolute;
     left: 50%;
     transform: translate(-50%);
 
-    display: inline-flex; /* 让图片和文字在同一行，不换行 */
-    align-items: center; /* 垂直居中文字和图片 */
+    display: inline-flex;
+    /* 让图片和文字在同一行，不换行 */
+    align-items: center;
+    /* 垂直居中文字和图片 */
 }
 
-.app-header .title img{
-    margin-right: 8px; /* 图片和文字之间的间距 */
-    width: 45px; /* 图片宽度 */
-    height: 45px; /* 图片高度 */
+.app-header .title img {
+    margin-right: 8px;
+    /* 图片和文字之间的间距 */
+    width: 55px;
+    /* 图片宽度 */
+    height: 45px;
+    /* 图片高度 */
 }
 
 
-.app-header .home {
+.app-header .GZ {
     width: 100px;
     height: 45px;
     position: absolute;
     top: 50%;
-    left: 70%;
+    left: 11%;
     text-align: center;
 
 }
+
+.app-header .YJ {
+    width: 100px;
+    height: 45px;
+    position: absolute;
+    top: 50%;
+    left: 17%;
+    text-align: center;
+
+}
+
+.app-header .JT {
+    width: 100px;
+    height: 45px;
+    position: absolute;
+    top: 50%;
+    left: 23%;
+    text-align: center;
+
+}
+
+.app-header .SL {
+    width: 100px;
+    height: 45px;
+    position: absolute;
+    top: 50%;
+    left: 29%;
+    text-align: center;
+
+}
+
 
 .app-header .data {
     width: 100px;
     height: 45px;
     position: absolute;
     top: 50%;
-    left: 76%;
+    left: 66%;
     text-align: center;
 }
 
-.homebt,
+.GZbt,
+.GZbt,
+.YJbt,
+.JTbt,
+.SLbt,
 .databt {
     color: white;
     font-size: 30px;
@@ -363,5 +439,4 @@ body {
     bottom: 150px;
     /* background-image: linear-gradient(to left, #080808,#fcfcfc);
     opacity:0.5;   */
-}
-</style>
+}</style>

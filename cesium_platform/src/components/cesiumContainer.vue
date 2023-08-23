@@ -1,43 +1,60 @@
 <template>
-  <div id="cesiumContainer" style="height:100%;width:100%;position: relative;">
-    <div id="latlng_show" style="position:absolute;z-index: 999;color:#fff;bottom: 1vw;right: 1vw;">
-      <div style="float:left;font-size: 1vw;margin-right: 1vw;">经度：<span id="longitude_show"></span></div>
-      <div style="float:left;font-size: 1vw;margin-right: 1vw;">纬度：<span id="latitude_show"></span></div>
-      <div style="float:left;font-size: 1vw;margin-right: 1vw;">视角高：<span id="altitude_show"></span>km</div>
-    </div>
-    <!-- <div style="float:left;"> 海拔高：<span id="elevation_show"></span>m</div>
+    <div id="cesiumContainer" style="height:100%;width:100%;position: relative;">
+        <div id="latlng_show" style="position:absolute;z-index: 999;color:#fff;bottom: 1vw;right: 1vw;">
+            <div style="float:left;font-size: 1vw;margin-right: 1vw;">经度：<span id="longitude_show"></span></div>
+            <div style="float:left;font-size: 1vw;margin-right: 1vw;">纬度：<span id="latitude_show"></span></div>
+            <div style="float:left;font-size: 1vw;margin-right: 1vw;">视角高：<span id="altitude_show"></span>km</div>
+        </div>
+        <!-- <div style="float:left;"> 海拔高：<span id="elevation_show"></span>m</div>
                         <div style="float:left;">俯仰角：<span id="pitch_show"></span></div>
                          <div style="float:left;">方向：<span id="heading_show"></span></div> -->
-  </div>
+    </div>
+    <div class="dynamic-layer" id="one">
+        <div class="line"></div>
+        <div class="pop">
+            <popUp :pointInfo="popData" ref="popUpRef" />
+        </div>
+    </div>
 </template>
 
 <script>
-import { onMounted } from 'vue';
-
+// import { ref, onMounted,onRenderTracked,onRenderTriggered } from 'vue';
+import { ref, onMounted } from 'vue';
+import popUp from './popUp.vue';
+import $ from 'jquery';
+// import chongqingshi from '../assets/chongqingshi.json'
+import dizaidianhuizong from '../assets/地灾点汇总.json'
+import heshabab3dm from '../assets/heshabab3dm/tileset.json'
 
 export default {
-    name: "cesiumContainer",
-    // props: {
-    //   msg: String
-    // },
+    // name: "cesiumContainer",
+    components: {
+        popUp
+    },
     data() {
         return {
+            // popData: {
+            //     pointId: '--',
+            //     title: '--'
+            // }
         }
     },
-    methods: {
 
-    },
-
-
-    // mounted() {
-    //     this.init();
-    //     // this.loadPoints();
-    // },
     setup() {
-        function init() {
+        // onRenderTracked((event)=>{
+        //     console.log(event)
+
+        // })
+        // onRenderTriggered((event)=>{
+        //     console.log(event)
+  
+        // })
+
+        const popUpRef = ref(null);
+        const init = () => {
             const token = '65f3777bb7d614820e3286b4572abf6a';
             const tdtUrl = 'https://t{s}.tianditu.gov.cn/';
-            // var subdomains = ['0', '1', '2', '3', '4', '5', '6', '7'];
+            // const subdomains = ['0', '1', '2', '3', '4', '5', '6', '7'];
 
             const viewer = new Cesium.Viewer("cesiumContainer", {
                 animation: false, //是否创建动画小器件，左下角仪表
@@ -96,6 +113,20 @@ export default {
             viewer.imageryLayers.remove(viewer.imageryLayers.get(0));
             //默认的Cesium会加载一个bingMap底图，这个地图网络不太好，一般要先去掉这个默认的
 
+
+            //定位到重庆
+            viewer.camera.flyTo({
+                destination: Cesium.Cartesian3.fromDegrees(107.33, 29.85, 922000),
+                orientation: {
+                    heading: Cesium.Math.toRadians(348.4202942851978),
+                    pitch: Cesium.Math.toRadians(-89.74026687972041),
+                    roll: Cesium.Math.toRadians(0)
+                },
+                complete: function callback() {
+                    // 定位完成之后的回调函数
+                }
+            });
+
             //影像
             const imgMap = new Cesium.UrlTemplateImageryProvider({
                 url: tdtUrl + 'DataServer?T=img_w&x={x}&y={y}&l={z}&tk=' + token,
@@ -115,19 +146,26 @@ export default {
                 maximumLevel: 10
             });
             viewer.imageryLayers.addImageryProvider(iboMap);
-
+            //高德地图
+            // viewer.imageryLayers.addImageryProvider(new Cesium.UrlTemplateImageryProvider({
+            //     url: 'http://webrd04.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}',
+            //     tilingScheme: new Cesium.WebMercatorTilingScheme()
+            // })
+            // );
             //地形
-            // var terrainUrls = new Array();
+            viewer.terrainProvider = Cesium.createWorldTerrain();
+            // const terrainUrls = [];
 
-            // for (var i = 0; i < subdomains.length; i++) {
-            //   var url = tdtUrl.replace('{s}', subdomains[i]) + 'mapservice/swdx?tk=' + token;
+            // for (let i = 0; i < 8; i++) {
+            //   const url = tdtUrl.replace('{s}', i) + 'mapservice/swdx?tk=' + token;
             //   terrainUrls.push(url);
             // }
 
-            // var provider = new Cesium.TerrainProvider({
+            // const terrainProvider = new Cesium.TerrainProvider({
             //   urls: terrainUrls
             // });
-            // viewer.terrainProvider = provider;
+            // viewer.terrainProvider = terrainProvider;
+
 
             // viewer.scene.globe.depthTestAgainstTerrain = false;//标绘将位于地形的顶部
 
@@ -136,18 +174,178 @@ export default {
             //添加行政区矢量数据
             const xingzhengquProvider = new Cesium.ArcGisMapServerImageryProvider({
                 url: "http://192.168.80.169:6080/arcgis/rest/services/重庆行政区划黄色/MapServer",
+
             });
             viewer.imageryLayers.addImageryProvider(xingzhengquProvider);
 
+
+
+
             // 地灾点矢量
-            // var dizaidianProvider = new Cesium.ArcGisMapServerImageryProvider({
+            // const dizaidianProvider = new Cesium.ArcGisMapServerImageryProvider({
             //     url: "http://192.168.80.169:6080/arcgis/rest/services/地研院承担监测项目位置/MapServer",
             // });
             // viewer.imageryLayers.addImageryProvider(dizaidianProvider);
 
-            //定位到重庆
+
+            // 跟随鼠标获取经纬度和海拔
+            const longitude_show = document.getElementById('longitude_show');
+            const latitude_show = document.getElementById('latitude_show');
+            const altitude_show = document.getElementById('altitude_show');
+            // const elevation_show = document.getElementById('elevation_show');
+            // const pitch_show = document.getElementById('pitch_show');
+            // const heading_show = document.getElementById('heading_show');
+
+            const canvas = viewer.scene.canvas;
+            const ellipsoid = viewer.scene.globe.ellipsoid;
+            const handlerMove = new Cesium.ScreenSpaceEventHandler(canvas);
+            handlerMove.setInputAction((movement) => {
+                //捕获椭球体，将笛卡尔二维平面坐标转为椭球体的笛卡尔三维坐标，返回球体表面的点
+                const cartesian = viewer.camera.pickEllipsoid(movement.endPosition, ellipsoid);
+                if (cartesian) {
+                    //将笛卡尔三维坐标转为地图坐标（弧度）
+                    const cartographic = viewer.scene.globe.ellipsoid.cartesianToCartographic(cartesian);
+                    //将地图坐标（弧度）转为十进制的度数
+                    const lat_String = Cesium.Math.toDegrees(cartographic.latitude).toFixed(4);
+                    const lon_String = Cesium.Math.toDegrees(cartographic.longitude).toFixed(4);
+                    const alti_String = (viewer.camera.positionCartographic.height / 1000).toFixed(2);
+                    // const elec_String = Number(viewer.scene.globe.getHeight(cartographic)).toFixed(2);
+                    // const pitch_String = (viewer.camera.pitch).toFixed(2);
+                    // const heading_String = (viewer.camera.heading).toFixed(2);
+
+                    longitude_show.innerHTML = lon_String;
+                    latitude_show.innerHTML = lat_String;
+                    altitude_show.innerHTML = alti_String;//视角高度 km
+                    // elevation_show.innerHTML = elec_String;//海拔
+                    // pitch_show.innerHTML = pitch_String;
+                    // heading_show.innerHTML = heading_String;
+                }
+            }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+
+            //添加所有地灾点数据
+            // const dizaidianProvider = new Cesium.ArcGisMapServerImageryProvider({
+            //     url: "http://192.168.80.169:6080/arcgis/rest/services/地研院承担监测项目位置/MapServer",
+            // });
+            // viewer.imageryLayers.addImageryProvider(dizaidianProvider);
+
+            
+
+            const tileset = new Cesium.Cesium3DTileset({
+                // url:'@/data/shahebaob3dm/tileset.json',
+                url:heshabab3dm,
+                maximumScreenSpaceError: 2, //最大的屏幕空间误差
+                maximumNumberOfLoadedTiles: 1000, //最大加载瓦片个数
+            })
+            //添加到球体上
+            tileset.readyPromise.then((tileset) => {
+                viewer.scene.primitives.add(tileset);
+                // 将3d tiles离地高度抬升30米
+                const cartographic = Cesium.Cartographic.fromCartesian(
+                    tileset.boundingSphere.center
+                );
+
+                const surface = Cesium.Cartesian3.fromRadians(
+                    cartographic.longitude,
+                    cartographic.latitude,
+                    0.0
+                );
+
+                const offset = Cesium.Cartesian3.fromRadians(
+                    cartographic.longitude,
+                    cartographic.latitude,
+                    30.0
+                );
+
+                const translation = Cesium.Cartesian3.subtract(
+                    offset,
+                    surface,
+                    new Cesium.Cartesian3()
+                );
+
+                tileset.modelMatrix = Cesium.Matrix4.fromTranslation(translation);
+            })
+
+
+
+
+            Cesium.GeoJsonDataSource.load(dizaidianhuizong, {}).then(function (dataSource) {
+                viewer.dataSources.add(dataSource);
+
+                const entities = dataSource.entities.values;
+
+                for (let i = 0; i < entities.length; i++) {
+                    let entity = entities[i];
+                    entity.billboard = undefined;
+                    entity.point = new Cesium.PointGraphics({
+                        color: Cesium.Color.YELLOW,
+                        pixelSize: 10,
+                        heightReference:Cesium.HeightReference.clampToGround,
+                        // clampToGround:true
+                    });
+                }
+            });
+
+
+
+
+            // 弹窗
+            const handler = new Cesium.ScreenSpaceEventHandler(canvas);
+            handler.setInputAction((click) => {
+                // console.log("左键点击事件",click.position);
+                //捕获椭球体，将笛卡尔二维平面坐标转为椭球体的笛卡尔三维坐标，返回球体表面的点
+                const cartesian = viewer.camera.pickEllipsoid(click.position, ellipsoid);
+                //将笛卡尔三维坐标转为地图坐标（弧度）
+                const cartographic = viewer.scene.globe.ellipsoid.cartesianToCartographic(cartesian);
+                //将地图坐标（弧度）转为十进制的度数
+                const lat = Cesium.Math.toDegrees(cartographic.latitude);
+                const lon = Cesium.Math.toDegrees(cartographic.longitude);
+                // const alti_String = (viewer.camera.positionCartographic.height / 1000).toFixed(2);
+                // console.log(lat,lon)
+                // 获取地图上的点位实体(entity)坐标
+                const pick = viewer.scene.pick(click.position);
+                // console.log(pick)
+
+                // 如果pick不是undefined，那么就是点到点位了
+                if (pick && pick.id) {
+                    // 定位到地图中心
+                    // this.locationToCenter(lon, lat);
+                    // console.log(pick.id);
+                    const data = {
+                        layerId: "layer1", // 英文，且唯一,内部entity会用得到
+                        lon: lon,
+                        lat: lat,
+                        element: "#one", // 弹框的唯一id
+                        boxHeightMax: 0, // 中间立方体的最大高度
+                    };
+                    // console.log(data)
+
+                    $("#one").css("z-index", 9990);
+                    showDynamicLayer(viewer, data, () => { // 回调函数 改变弹窗的内容;
+                        popUpRef.value.title = pick.id.name;
+                        popUpRef.value.pointId = pick.id.id;
+                    });
+                    // 调用弹框的默认方法
+                    popUpRef.value.defalutSetting();
+                    // console.log(popUpRef.value)
+                    //调用popUp.vue中的methods
+
+                    flyTo(viewer,data)
+
+                }
+                else {
+                    // 移除弹框
+                    if (document.querySelector("#one")) {
+                        removeDynamicLayer(viewer, { element: "#one" });
+                        $("#one").css("z-index", -1);
+                    }
+                }
+
+            }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+        }
+
+        const flyTo=(viewer,data)=>{
             viewer.camera.flyTo({
-                destination: Cesium.Cartesian3.fromDegrees(107.33, 29.85, 922000),
+                destination: Cesium.Cartesian3.fromDegrees(data.lon, data.lat, 5000),
                 orientation: {
                     heading: Cesium.Math.toRadians(348.4202942851978),
                     pitch: Cesium.Math.toRadians(-89.74026687972041),
@@ -157,237 +355,136 @@ export default {
                     // 定位完成之后的回调函数
                 }
             });
+        }
+     
+        // 创建一个动态实体弹窗
+        const showDynamicLayer = (viewer, data, callback) => {
+            /* 弹窗的dom操作--默认必须*/
+            $(data.element).css({ opacity: 0 }); // 使用hide()或者display是不行的 因为cesium是用pre定时重绘的div导致 left top display 会一直重绘
+            $(".dynamic-layer .line").css({ width: 0 });
+            $(data.element).find(".main").hide(0);
+            /* 弹窗的dom操作--针对性操作*/
+            callback();
 
-            // 跟随鼠标获取经纬度和海拔
-            const longitude_show = document.getElementById('longitude_show');
-            const latitude_show = document.getElementById('latitude_show');
-            const altitude_show = document.getElementById('altitude_show');
-            // var elevation_show = document.getElementById('elevation_show');
-            // var pitch_show = document.getElementById('pitch_show');
-            // var heading_show = document.getElementById('heading_show');
+            // 添加div弹窗
+            // const lon = data.lon * 1, lat = data.lat * 1;
+            const lon=data.lon,lat=data.lat;
+            // console.log(data.lon,data.lat)
+            // data.boxHeightMax为undef也没事
+            const divPosition = Cesium.Cartesian3.fromDegrees(lon, lat, data.boxHeightMax);
+            // 设置弹窗的位置
+            const handler = viewer.scene.postRender.addEventListener(() => {
+                const canvasPosition = viewer.scene.cartesianToCanvasCoordinates(divPosition);
+                if (canvasPosition) {
+                    // const x = canvasPosition.x; // 设置横坐标偏移量
+                    // const y = canvasPosition.y; // 设置纵坐标偏移量
 
-            const canvas = viewer.scene.canvas;
-            //具体事件的实现
-            const ellipsoid = viewer.scene.globe.ellipsoid;
-            const handlerMove = new Cesium.ScreenSpaceEventHandler(canvas);
-            handlerMove.setInputAction((movement) => {
-                //捕获椭球体，将笛卡尔二维平面坐标转为椭球体的笛卡尔三维坐标，返回球体表面的点
-                var cartesian = viewer.camera.pickEllipsoid(movement.endPosition, ellipsoid);
-                if (cartesian) {
-                    //将笛卡尔三维坐标转为地图坐标（弧度）
-                    var cartographic = viewer.scene.globe.ellipsoid.cartesianToCartographic(cartesian);
-                    //将地图坐标（弧度）转为十进制的度数
-                    var lat_String = Cesium.Math.toDegrees(cartographic.latitude).toFixed(4);
-                    var log_String = Cesium.Math.toDegrees(cartographic.longitude).toFixed(4);
-                    var alti_String = (viewer.camera.positionCartographic.height / 1000).toFixed(2);
-                    // var elec_String = Number(viewer.scene.globe.getHeight(cartographic)).toFixed(2);
-                    // var pitch_String = (viewer.camera.pitch).toFixed(2);
-                    // var heading_String = (viewer.camera.heading).toFixed(2);
-
-                    longitude_show.innerHTML = log_String;
-                    latitude_show.innerHTML = lat_String;
-                    altitude_show.innerHTML = alti_String;//视角高度 km
-                    // elevation_show.innerHTML = elec_String;//海拔
-                    // pitch_show.innerHTML = pitch_String;
-                    // heading_show.innerHTML = heading_String;
+                    // const x = canvasPosition.x - $(data.element).outerWidth() / 2; // 设置横坐标偏移量
+                    // const y = canvasPosition.y - $(data.element).outerHeight(); // 设置纵坐标偏移量
+                    // console.log(x,y)
+                    $(data.element).css({ left: 310, top: 400 });
+                    handler(); // 一次性事件处理后取消监听
                 }
-            }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
-
-
-            //单击事件
-            // const handlerclick = new Cesium.ScreenSpaceEventHandler(canvas);
-            // handlerclick.setInputAction((click) => {
-            //     console.log("左键单击事件：", click.position);
-            //     const cartesian = viewer.camera.pickEllipsoid(click.position, ellipsoid);
-            //     const cartographic = Cesium.Cartographic.fromCartesian(cartesian);
-            //     const lat = Cesium.Math.toDegrees(cartographic.latitude).toFixed(5);
-            //     const lon = Cesium.Math.toDegrees(cartographic.longitude).toFixed(5);
-            //     console.log(lat, lon)
-
-
-            //     const pick = viewer.scene.pick(click.position);
-            //     console.log(pick)
-            //     // 如果pick不是undefined，那么就是点到点位了
-            //     if (pick && pick.id) {
-            //         // 定位到地图中心
-            //         // this.locationToCenter(lon, lat);
-            //         console.log(pick.id);
-            //         const data = {
-            //             layerId: "layer1", // 英文，且唯一,内部entity会用得到
-            //             lon: lon,
-            //             lat: lat,
-            //             element: "#one", // 弹框的唯一id
-            //             boxHeightMax: 0, // 中间立方体的最大高度
-            //         };
-
-            //         this.$("#one").css("z-index", 9990);
-            //         this.showDynamicLayer(this.viewer, data, () => { // 回调函数 改变弹窗的内容;
-            //             this.popData.title = pick.id.name;
-            //             this.popData.pointId = pick.id.id;
-            //         });
-            //         // 调用弹框的默认方法
-            //         this.$refs.popUp.defalutSetting();
-            //     } else {
-            //         // 移除弹框
-            //         if (document.querySelector("#one")) {
-            //             this.removeDynamicLayer(this.viewer, { element: "#one" });
-            //             $("#one").css("z-index", -1);
-            //         }
-            //     }             
-            // }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
-
-
-            // loadPoints() {
-            //     this.pointInfo = [
-            //         {
-            //             id: "392f7fbb-ae25-4eef-ac43-58fd91148d1f",
-            //             latitude: "31.87532",
-            //             longitude: "120.55538",
-            //             psName: "有限公司1",
-            //         },
-            //         {
-            //             id: "0278a88c-b4f4-4d64-9ccb-65831b3fb19d",
-            //             latitude: "31.991057",
-            //             longitude: "120.700713",
-            //             psName: "有限公司2",
-            //         },
-            //         {
-            //             id: "248f6853-2ced-4aa6-b679-ea6422a5f3ac",
-            //             latitude: "31.94181",
-            //             longitude: "120.51517",
-            //             psName: "有限公司3",
-            //         },
-            //         {
-            //             id: "F8DADA95-A438-49E1-B263-63AE3BD7DAC4",
-            //             latitude: "31.97416",
-            //             longitude: "120.56132",
-            //             psName: "有限公司4",
-            //         },
-            //         {
-            //             id: "9402a911-78c5-466a-9162-d5b04d0e48f0",
-            //             latitude: "31.91604",
-            //             longitude: "120.57771",
-            //             psName: "有限公司5",
-            //         },
-            //         {
-            //             id: "EB392DD3-6998-437F-8DCB-F805AD4DB340",
-            //             latitude: "31.88727",
-            //             longitude: "120.48887",
-            //             psName: "有限公司6",
-            //         },
-            //     ];
-            //     this.addMarker();
-            // },
-
-            // addMarker() {
-            //     const _textColor = "rgb(11, 255, 244)";
-            //     const Cesium = this.cesium;
-            //     // 清除上一次加载的点位
-            //     this.viewer.entities.removeAll();
-            //     // foreach循环加载点位
-            //     this.pointInfo.forEach((pointObj) => {
-            //         this.viewer.entities.add({
-            //             name: pointObj.psName,
-            //             code: pointObj.id,
-            //             id: pointObj.id,
-            //             position: Cesium.Cartesian3.fromDegrees(
-            //                 pointObj.longitude * 1,
-            //                 pointObj.latitude * 1
-            //             ),
-            //             // 点
-            //             // point: {
-            //             //   pixelSize: 5,
-            //             //   color: Cesium.Color.RED,
-            //             //   outlineColor: Cesium.Color.WHITE,
-            //             //   outlineWidth: 2,
-            //             // },
-            //             // 文字标签
-            //             label: {
-            //                 // show: false,
-            //                 text: pointObj.psName,
-            //                 font: "12px monospace",
-            //                 style: Cesium.LabelStyle.FILL_AND_OUTLINE,
-            //                 fillColor: Cesium.Color.LIME,
-            //                 outlineWidth: 4,
-            //                 verticalOrigin: Cesium.VerticalOrigin.BOTTOM, // 垂直方向以底部来计算标签的位置
-            //                 pixelOffset: new Cesium.Cartesian2(0, -20), // 偏移量
-            //             },
-            //             // 图标
-            //             billboard: {
-            //                 // image: require("@/assets/imgs/point.png"),
-            //                 width: 18,
-            //                 height: 24,
-            //             },
-            //         });
-            //     });
-            // },
-            // 创建一个动态实体弹窗
-            // showDynamicLayer(viewer, data, callback) {
-            //     /* 弹窗的dom操作--默认必须*/
-            //     this.$(data.element).css({ opacity: 0 }); // 使用hide()或者display是不行的 因为cesium是用pre定时重绘的div导致 left top display 会一直重绘
-            //     this.$(".dynamic-layer .line").css({ width: 0 });
-            //     this.$(data.element).find(".main").hide(0);
-            //     /* 弹窗的dom操作--针对性操作*/
-            //     callback();
-
-            //     // 添加div弹窗
-            //     const lon = data.lon * 1, lat = data.lat * 1;
-            //     // data.boxHeightMax为undef也没事
-            //     const divPosition = this.cesium.Cartesian3.fromDegrees(lon, lat, data.boxHeightMax);
-            //     this.$("#one").css({ opacity: 1 });
-            //     this.$("#one").find(".line").animate({
-            //         width: 50 // 线的宽度
-            //     }, 500, () => {
-            //         this.$("#one").find(".main").fadeIn(500);
-            //     });
-            //     // 当为true的时候，表示当element在地球背面会自动隐藏。默认为false，置为false，不会这样。但至少减轻判断计算压力
-            //     this.creatHtmlElement(viewer, data.element, divPosition, [10, -0], true);
-            // },
-
-            // // 创建一个 htmlElement元素 并且，其在earth背后会自动隐藏
-            // creatHtmlElement(viewer, element, position, arr, flog) {
-            //     const Cesium = this.cesium;
-            //     const ele = document.querySelector(element);
-            //     const scratch = new Cesium.Cartesian2(); // cesium二维笛卡尔 笛卡尔二维坐标系就是我们熟知的而二维坐标系；三维也如此
-            //     const scene = viewer.scene, camera = viewer.camera;
-            //     scene.preRender.addEventListener(() => {
-            //         var canvasPosition = scene.cartesianToCanvasCoordinates(position, scratch); // cartesianToCanvasCoordinates 笛卡尔坐标（3维度）到画布坐标
-            //         if (Cesium.defined(canvasPosition)) {
-            //             ele.style.left = canvasPosition.x + arr[0] + "px";
-            //             ele.style.top = canvasPosition.y + arr[1] + "px";
-            //             /* 此处进行判断**/// var px_position = Cesium.SceneTransforms.wgs84ToWindowCoordinates(scene, cartesian)
-            //             if (flog && flog == true) {
-            //                 var e = position, i = camera.position, n = scene.globe.ellipsoid.cartesianToCartographic(i).height
-            //                 if (!(n += 1 * scene.globe.ellipsoid.maximumRadius, Cesium.Cartesian3.distance(i, e) > n)) {
-            //                     // $(element).show()
-            //                     ele.style.display = "block";
-            //                 } else {
-            //                     ele.style.display = "none";
-            //                     // $(element).hide()
-            //                 }
-            //             }
-            //         }
-            //     });
-            // },
-
-            // // 移除动态弹窗 为了方便 这里的移除 是真的移除，因此 到时是需要重建弹窗的doom的
-            // removeDynamicLayer(viewer, data) {
-            //     document.querySelector(data.element).style.opacity = 0;
-            // }
+            });
+            $("#one").css({ opacity: 1, display: "flex" });
+            $("#one").find(".line").animate({
+                width: 50 // 线的宽度
+            }, 500, () => {
+                $("#one").find(".main").fadeIn(500);
+            });
+            // console.log("生成弹窗")
 
         }
+
+
+        // 移除动态弹窗 为了方便 这里的移除 是真的移除，因此 到时是需要重建弹窗的doom的
+        const removeDynamicLayer = (viewer, data) => {
+            document.querySelector(data.element).style.opacity = 0;
+        }
+
+        // const destroyViewer =(viewer) =>{
+        //     if (viewer){
+        //         viewer.destroy();
+        //     }
+
+        // }
+        // onMounted(init);
         onMounted(() => {
             init()
+            // popUpRef.value = this.$refs.popUp;
+
         })
-        return {};
-    }
+
+        // onBeforeUnmount(()=> {
+        //     // if (this.viewer && !this.viewer.isDestroyed()) {
+        //    destroyViewer();
+        //     // }
+        // })
+
+        return {
+            showDynamicLayer,
+            // creatHtmlElement,
+            removeDynamicLayer,
+            popUpRef,
+            // viewer
+
+        };
+    },
+
+    //     created() {
+    //     this.anotherMethod()
+    //   }
 }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .cesiumContainer {
-  height: 100%;
+    height: 100%;
 }
+
+
+.dynamic-layer {
+    display: none;
+    user-select: none;
+    pointer-events: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 534px;
+    height: 534px;
+    // width: 100%; // 这里设置成100%，打算在组件内根据内容设置具体的宽度实践 发现无效
+    z-index: 99990;
+}
+
+.dynamic-layer .line {
+    position: absolute;
+    left: 0;
+    width: 0;
+    /* height: 100px; */
+    bottom: 0;
+    /* background: url(./img/line.png); */
+}
+
+.dynamic-layer .pop {
+    display: flex;
+    position: absolute;
+    // top: 0;
+    // left: 30px;
+    // right: 0;
+    /* bottom: 100px; */
+    height: 14vw;
+    width: 80vw;
+    transform: translateY(-100%);
+    //   background: url(~@/assets/map/layer_border.png) no-repeat;
+    background-size: 100% 100%;
+    color: rgb(5, 5, 5);
+    padding: 20px 20px 20px 20px;
+    font-size: 14px;
+    user-select: text;
+    pointer-events: auto;
+    background-color: rgba(255, 255, 255, 1);
+}
+
 
 // .cesiumContainer {
 //   height: 850px;
